@@ -29,11 +29,11 @@ app.post('/createUser', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     try {
-        const { nameUser, passwordUser } = req.body;
+        const { emailUser, passwordUser } = req.body;
 
         const user = await model.User.findOne({
             where: {
-                name: nameUser,
+                email: emailUser,
                 password: passwordUser
             }
         });

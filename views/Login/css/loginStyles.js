@@ -65,6 +65,14 @@ const loginStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  passwordContainer: {
+    position: 'relative',
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },  
 });
 
 export default loginStyles;
