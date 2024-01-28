@@ -31,7 +31,6 @@ app.post('/login', async (req, res) => {
     try {
         const { nameUser, passwordUser } = req.body;
 
-        // Consulta o banco de dados para encontrar o usuário
         const user = await model.User.findOne({
             where: {
                 name: nameUser,
