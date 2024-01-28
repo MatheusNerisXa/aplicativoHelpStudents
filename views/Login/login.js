@@ -19,14 +19,14 @@ export default function Login({ navigation }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ emailUser: user, passwordUser: password }), 
+        body: JSON.stringify({ emailUser: user, passwordUser: password }),
       });
-  
+
       if (response.ok) {
         navigation.navigate('Home');
       } else {
         const data = await response.json();
-        setMessage(data.message || 'E-mail ou senha inválidos!');
+        setMessage(data.message || 'E-mail ou senha inválidos');
         showErrorModal(); // Exibir o modal de erro
       }
     } catch (error) {
@@ -45,31 +45,36 @@ export default function Login({ navigation }) {
   };
 
   const navigateToSignUp = () => {
-    navigation.navigate('Cadastro'); 
+    navigation.navigate('Cadastro');
   };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={[loginStyles.container, loginStyles.container__center]}
+      style={loginStyles.container}
     >
       <View style={loginStyles.logo__container}>
-        <Image source={require('../../assets/img/logo.png')} style={{ width: 180, height: 180 }} />
+        <Image source={require('../../assets/img/logo.png')} style={{ width: 210, height: 180 }} />
       </View>
 
-      <View style={loginStyles.login__form}>
+      <View style={loginStyles.inputContainer}>
+        <Text style={loginStyles.label}>Email:</Text>
         <TextInput
           style={loginStyles.login__input}
-          placeholder="E-mail"
+          placeholder="Digite seu email"
           placeholderTextColor="#000"
           keyboardType="email-address"
-          autoCapitalize="none" 
+          autoCapitalize="none"
           onChangeText={(text) => setUser(text)}
         />
+      </View>
+
+      <View style={loginStyles.inputContainer}>
+        <Text style={loginStyles.label}>Senha:</Text>
         <View style={loginStyles.passwordContainer}>
           <TextInput
             style={loginStyles.login__input}
-            placeholder="Senha"
+            placeholder="Digite sua senha"
             placeholderTextColor="#000"
             secureTextEntry={!showPassword}
             onChangeText={(text) => setPassword(text)}
@@ -81,16 +86,21 @@ export default function Login({ navigation }) {
             <AntDesign name={showPassword ? 'eye' : 'eyeo'} size={20} color="#262824" />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={loginStyles.login__button} onPress={handleLogin}>
-          <Text style={loginStyles.login__buttonText}>Login</Text>
+      </View>
+
+      <View style={loginStyles.linkContainer}>
+        <TouchableOpacity style={loginStyles.linkButton} onPress={navigateToSignUp}>
+          <Text style={loginStyles.linkButtonText}>Cadastre-se</Text>
+        </TouchableOpacity>
+        <Text style={{ color: '#000', fontSize: 16, marginHorizontal: 10 , marginTop: 7}}>|</Text>
+        <TouchableOpacity style={loginStyles.linkButton}>
+          <Text style={loginStyles.linkButtonText}>Recuperar Senha</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={loginStyles.login__footer}>
-        <TouchableOpacity style={loginStyles.login__footerButton} onPress={navigateToSignUp}>
-          <Text style={loginStyles.login__footerButtonText}>Cadastre-se</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={loginStyles.login__button} onPress={handleLogin}>
+        <Text style={loginStyles.login__buttonText}>ENTRAR</Text>
+      </TouchableOpacity>
 
       {/* Modal de erro */}
       <Modal
