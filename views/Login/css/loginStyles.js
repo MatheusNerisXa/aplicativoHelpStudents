@@ -72,7 +72,32 @@ const loginStyles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     top: 10,
-  },  
+  },
+  modalContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    alignSelf: 'center',
+  },
+  modalText: {
+    color: '#262824',
+    marginBottom: 20,
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  modalButton: {
+    backgroundColor: '#253494',
+    padding: 12,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default loginStyles;

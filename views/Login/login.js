@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; // AntDesign é uma das bibliotecas suportadas pelo Expo
+import { AntDesign } from '@expo/vector-icons';
+import Modal from 'react-native-modal';
 import loginStyles from './css/loginStyles';
 import config from '../../config/config.json';
 
@@ -9,6 +10,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -24,12 +26,22 @@ export default function Login({ navigation }) {
         navigation.navigate('Home');
       } else {
         const data = await response.json();
-        setMessage(data.message || 'E-mail ou senha inválidos');
+        setMessage(data.message || 'E-mail ou senha inválidos!');
+        showErrorModal(); // Exibir o modal de erro
       }
     } catch (error) {
       console.error('Error during login:', error);
       setMessage('An error occurred during login');
+      showErrorModal(); // Exibir o modal de erro
     }
+  };
+
+  const showErrorModal = () => {
+    setIsErrorModalVisible(true);
+  };
+
+  const hideErrorModal = () => {
+    setIsErrorModalVisible(false);
   };
 
   const navigateToSignUp = () => {
@@ -46,7 +58,6 @@ export default function Login({ navigation }) {
       </View>
 
       <View style={loginStyles.login__form}>
-        {message && <Text style={loginStyles.login__message}>{message}</Text>}
         <TextInput
           style={loginStyles.login__input}
           placeholder="E-mail"
@@ -80,6 +91,21 @@ export default function Login({ navigation }) {
           <Text style={loginStyles.login__footerButtonText}>Cadastre-se</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Modal de erro */}
+      <Modal
+        isVisible={isErrorModalVisible}
+        onBackdropPress={hideErrorModal}
+        animationIn="fadeIn"
+        animationOut="fadeOut"
+      >
+        <View style={loginStyles.modalContainer}>
+          <Text style={loginStyles.modalText}>{message}</Text>
+          <TouchableOpacity style={loginStyles.modalButton} onPress={hideErrorModal}>
+            <Text style={loginStyles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
