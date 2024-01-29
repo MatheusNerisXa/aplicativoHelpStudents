@@ -92,7 +92,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity style={loginStyles.linkButton} onPress={navigateToSignUp}>
           <Text style={loginStyles.linkButtonText}>Cadastre-se</Text>
         </TouchableOpacity>
-        <Text style={{ color: '#000', fontSize: 16, marginHorizontal: 10 , marginTop: 7}}>|</Text>
+        <Text style={{ color: '#FFF', fontSize: 16, marginHorizontal: 1 , marginTop: 7}}>|</Text>
         <TouchableOpacity style={loginStyles.linkButton}>
           <Text style={loginStyles.linkButtonText}>Recuperar Senha</Text>
         </TouchableOpacity>

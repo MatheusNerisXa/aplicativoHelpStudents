@@ -1,6 +1,6 @@
 // Cadastro.js
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { css } from "../Login/css/cadastroStyles";
 import config from "../../config/config.json";
@@ -12,7 +12,6 @@ export default function Cadastro({ navigation }) {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const registerUser = async () => {
     try {
@@ -48,10 +47,6 @@ export default function Cadastro({ navigation }) {
       {message && (
         <Text style={css.messageText}>{message}</Text>
       )}
-
-      <View style={css.logo__container}>
-        <Image source={require('../../assets/img/logo.png')} style={{ width: 210, height: 180 }} />
-      </View>
 
       <View style={css.inputContainer}>
         <Text style={css.label}>Nome:</Text>
@@ -100,20 +95,20 @@ export default function Cadastro({ navigation }) {
             style={css.input}
             placeholder="Confirme sua senha"
             placeholderTextColor="#2c3e50"
-            secureTextEntry={!showConfirmPassword}
+            secureTextEntry={!showPassword}
             onChangeText={(text) => setConfirmPassword(text)}
           />
           <TouchableOpacity
             style={css.eyeIcon}
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+            onPress={() => setShowPassword(!showPassword)}
           >
-            <AntDesign name={showConfirmPassword ? 'eye' : 'eyeo'} size={20} color="#2c3e50" />
+            <AntDesign name={showPassword ? 'eye' : 'eyeo'} size={20} color="#2c3e50" />
           </TouchableOpacity>
         </View>
       </View>
 
       <TouchableOpacity style={css.button} onPress={registerUser}>
-        <Text style={css.button__text}>CADASTRAR</Text>
+        <Text style={css.button__text}>Cadastrar</Text>
       </TouchableOpacity>
     </View>
   );
