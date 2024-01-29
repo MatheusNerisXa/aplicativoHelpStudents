@@ -16,7 +16,7 @@ export default function App() {
           options={{
             title: 'Cadastro',
             headerStyle: {
-              backgroundColor: '#2c3e50', // Cor do cabeçalho
+              backgroundColor: '#253494', // Cor do cabeçalho
             },
             headerTintColor: '#fff', // Cor do texto no cabeçalho
             headerTitleStyle: {

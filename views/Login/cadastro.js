@@ -1,19 +1,27 @@
 // Cadastro.js
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { css } from "../Login/css/cadastroStyles";
+import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import { css } from "../Login/css/cadastroStyles";
 import config from "../../config/config.json";
 
 export default function Cadastro({ navigation }) {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  async function registerUser() {
+  const registerUser = async () => {
     try {
+      // Verificar se as senhas são iguais
+      if (password !== confirmPassword) {
+        setMessage('As senhas não coincidem');
+        return;
+      }
+
       let response = await fetch(config.urlRootNode + 'createUser', {
         method: 'POST',
         headers: {
@@ -33,7 +41,7 @@ export default function Cadastro({ navigation }) {
       console.error('Error during registration:', error);
       setMessage('An error occurred during registration');
     }
-  }
+  };
 
   return (
     <View style={css.container}>
@@ -41,7 +49,12 @@ export default function Cadastro({ navigation }) {
         <Text style={css.messageText}>{message}</Text>
       )}
 
+      <View style={css.logo__container}>
+        <Image source={require('../../assets/img/logo.png')} style={{ width: 210, height: 180 }} />
+      </View>
+
       <View style={css.inputContainer}>
+        <Text style={css.label}>Nome:</Text>
         <TextInput
           style={css.input}
           placeholder="Digite seu nome"
@@ -51,6 +64,7 @@ export default function Cadastro({ navigation }) {
       </View>
 
       <View style={css.inputContainer}>
+        <Text style={css.label}>Email:</Text>
         <TextInput
           style={css.input}
           placeholder="Digite seu email"
@@ -61,6 +75,7 @@ export default function Cadastro({ navigation }) {
       </View>
 
       <View style={css.inputContainer}>
+        <Text style={css.label}>Senha:</Text>
         <View style={css.passwordContainer}>
           <TextInput
             style={css.input}
@@ -78,8 +93,27 @@ export default function Cadastro({ navigation }) {
         </View>
       </View>
 
+      <View style={css.inputContainer}>
+        <Text style={css.label}>Confirmar Senha:</Text>
+        <View style={css.passwordContainer}>
+          <TextInput
+            style={css.input}
+            placeholder="Confirme sua senha"
+            placeholderTextColor="#2c3e50"
+            secureTextEntry={!showConfirmPassword}
+            onChangeText={(text) => setConfirmPassword(text)}
+          />
+          <TouchableOpacity
+            style={css.eyeIcon}
+            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            <AntDesign name={showConfirmPassword ? 'eye' : 'eyeo'} size={20} color="#2c3e50" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <TouchableOpacity style={css.button} onPress={registerUser}>
-        <Text style={css.button__text}>Cadastrar</Text>
+        <Text style={css.button__text}>CADASTRAR</Text>
       </TouchableOpacity>
     </View>
   );
