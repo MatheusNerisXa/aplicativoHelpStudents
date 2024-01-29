@@ -62,7 +62,7 @@ export default function Login({ navigation }) {
         <TextInput
           style={loginStyles.login__input}
           placeholder="Digite seu email"
-          placeholderTextColor="#000"
+          placeholderTextColor="#FFF"
           keyboardType="email-address"
           autoCapitalize="none"
           onChangeText={(text) => setUser(text)}
@@ -75,7 +75,7 @@ export default function Login({ navigation }) {
           <TextInput
             style={loginStyles.login__input}
             placeholder="Digite sua senha"
-            placeholderTextColor="#000"
+            placeholderTextColor="#FFF"
             secureTextEntry={!showPassword}
             onChangeText={(text) => setPassword(text)}
           />
@@ -83,7 +83,7 @@ export default function Login({ navigation }) {
             style={loginStyles.eyeIcon}
             onPress={() => setShowPassword(!showPassword)}
           >
-            <AntDesign name={showPassword ? 'eye' : 'eyeo'} size={20} color="#262824" />
+            <AntDesign name={showPassword ? 'eye' : 'eyeo'} size={20} color="#FFF" />
           </TouchableOpacity>
         </View>
       </View>

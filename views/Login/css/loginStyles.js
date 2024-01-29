@@ -5,7 +5,7 @@ const loginStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F5F5F5'
+    backgroundColor: '#253494'
   },
   logo__container: {
     width: 130,
@@ -27,14 +27,14 @@ const loginStyles = StyleSheet.create({
   label: {
     fontSize: 14,
     marginBottom: 5,
-    color: '#000',
+    color: '#FFF',
   },
   login__input: {
     height: 40,
     marginBottom: 15,
     paddingLeft: 15,
     borderWidth: 1,
-    borderColor: '#253494',
+    borderColor: '#FFF',
     borderRadius: 5,
     fontSize: 16,
     color: '#333',
@@ -47,9 +47,10 @@ const loginStyles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     right: 10,
+    top: 10
   },
   login__button: {
-    backgroundColor: '#253494',
+    backgroundColor: '#00c4cb',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
@@ -70,7 +71,7 @@ const loginStyles = StyleSheet.create({
     padding: 10,
   },
   linkButtonText: {
-    color: '#253494',
+    color: '#FFF',
     textAlign: 'center',
     textTransform: 'uppercase',
     fontWeight: 'bold',
