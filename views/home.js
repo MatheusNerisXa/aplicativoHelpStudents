@@ -8,9 +8,9 @@ export default function Home({navigation}) {
     return (
         <View style={css.container}>
 
-            <View style={css.header}>
+            {/* <View style={css.header}>
                 <Image style={css.header__img} source={require('../assets/img/logo.png')} />
-            </View>
+            </View> */}
 
             <View style={css.footer}>
 

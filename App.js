@@ -16,7 +16,7 @@ export default function App() {
           options={{
             title: 'Cadastro',
             headerStyle: {
-              backgroundColor: '#2c3e50',
+              backgroundColor: '#253494',
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
@@ -28,6 +28,10 @@ export default function App() {
           name="Ínicio"
           component={Home}
           options={{
+            headerStyle: {
+              backgroundColor: '#253494',
+            },
+            headerTintColor: '#fff',
             headerLeft: null,
             gestureEnabled: false, // Disable swipe gesture
           }}
