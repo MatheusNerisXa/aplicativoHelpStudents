@@ -16,7 +16,7 @@ export default function App() {
           options={{
             title: 'Cadastro',
             headerStyle: {
-              backgroundColor: '#253494', // Cor do cabeçalho
+              backgroundColor: '#2c3e50', // Cor do cabeçalho
             },
             headerTintColor: '#fff', // Cor do texto no cabeçalho
             headerTitleStyle: {
@@ -24,7 +24,13 @@ export default function App() {
             },
           }}
         />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen
+          name="Ínicio"
+          component={Home}
+          options={{
+            headerLeft: null, // Hide the back button
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
