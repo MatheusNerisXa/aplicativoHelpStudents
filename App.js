@@ -16,9 +16,9 @@ export default function App() {
           options={{
             title: 'Cadastro',
             headerStyle: {
-              backgroundColor: '#2c3e50', // Cor do cabeçalho
+              backgroundColor: '#2c3e50',
             },
-            headerTintColor: '#fff', // Cor do texto no cabeçalho
+            headerTintColor: '#fff',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -28,7 +28,8 @@ export default function App() {
           name="Ínicio"
           component={Home}
           options={{
-            headerLeft: null, // Hide the back button
+            headerLeft: null,
+            gestureEnabled: false, // Disable swipe gesture
           }}
         />
       </Stack.Navigator>

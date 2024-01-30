@@ -37,7 +37,7 @@ const loginStyles = StyleSheet.create({
     borderColor: '#FFF',
     borderRadius: 5,
     fontSize: 16,
-    color: '#333',
+    color: '#FFF',
     width: '100%',
   },
   passwordContainer: {
