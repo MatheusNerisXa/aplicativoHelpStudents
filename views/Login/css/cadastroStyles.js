@@ -6,18 +6,18 @@ export const css = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 2,
-    backgroundColor: '#F5F5F5', // Adicionei a cor de fundo ao container
+    paddingHorizontal: 20,
+    backgroundColor: '#F5F5F5',
   },
 
   inputContainer: {
-    width: '90%',
+    width: '100%',
     marginBottom: 15,
   },
   label: {
     fontSize: 14,
     marginBottom: 5,
-    color: '#FFF',
+    color: '#333',
   },
   input: {
     height: 40,
@@ -27,8 +27,9 @@ export const css = StyleSheet.create({
     color: '#333',
     fontSize: 16,
     width: '100%',
-    borderColor: '#253494', // Adicione esta linha para definir a cor da borda
-    borderWidth: 1, // Adicione esta linha para definir a largura da borda
+    borderColor: '#95a5a6',
+    borderWidth: 1,
+    marginBottom: 5,
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -37,6 +38,9 @@ export const css = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     position: 'relative',
+    marginBottom: 10,
+    borderColor: '#95a5a6',
+    borderWidth: 1,
   },
   eyeIcon: {
     padding: 10,
@@ -49,7 +53,7 @@ export const css = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    width: '90%',
+    width: '100%',
     marginTop: 20,
   },
   button__text: {
@@ -57,10 +61,22 @@ export const css = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
-  messageText: {
+  errorContainer: {
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  errorText: {
     color: '#e74c3c',
-    marginBottom: 20,
+    fontSize: 14,
     textAlign: 'center',
-    fontSize: 16,
+  },
+  errorMessage: {
+    color: '#e74c3c',
+    fontSize: 12,
+    marginLeft: 5,
+  },
+  errorBorder: {
+    borderColor: '#e74c3c',
+    borderWidth: 1,
   },
 });
