@@ -37,12 +37,12 @@ export default function Cadastro({ navigation }) {
   const registerUser = async () => {
     try {
       validateInputs();
-
+  
       if (userError || emailError || passwordError || confirmPasswordError) {
-        // Se houver erro, não prosseguir com o registro
+        // If there is an error, do not proceed with the registration
         return;
       }
-
+  
       let response = await fetch(config.urlRootNode + 'createUser', {
         method: 'POST',
         headers: {
@@ -55,14 +55,19 @@ export default function Cadastro({ navigation }) {
           emailUser: email
         })
       });
-
+  
       let data = await response.json();
       setMessage(data.message);
+  
+      // If the registration is successful, navigate to the 'Home' screen
+      if (!data.error) {
+        navigation.navigate('Home');
+      }
     } catch (error) {
       console.error('Error during registration:', error);
       setMessage('Ocorreu um erro durante o cadastro');
     }
-  };
+  };  
 
   return (
     <View style={css.container}>
