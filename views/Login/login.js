@@ -21,9 +21,9 @@ export default function Login({ navigation }) {
         },
         body: JSON.stringify({ emailUser: user, passwordUser: password }),
       });
-
+  
       if (response.ok) {
-        navigation.navigate('Ínicio');
+        navigation.navigate('Main', { screen: 'Home' });
       } else {
         const data = await response.json();
         setMessage(data.message || 'E-mail ou senha inválidos');
@@ -35,7 +35,8 @@ export default function Login({ navigation }) {
       showErrorModal(); // Exibir o modal de erro
     }
   };
-
+  
+  
   const showErrorModal = () => {
     setIsErrorModalVisible(true);
   };
