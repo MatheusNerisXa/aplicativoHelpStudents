@@ -78,6 +78,16 @@ export default function App() {
             headerLeft: null, // Remove o botão de voltar
           }}
         />
+        <Stack.Screen
+          name="Cadastro"
+          component={Cadastro}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' }, // Cor de fundo azul
+            headerTintColor: 'white', // Cor do texto branco
+            headerTitle: 'Cadastro', // Título do cabeçalho para a tela "Ínicio"
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
