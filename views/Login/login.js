@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
       });
   
       if (response.ok) {
-        navigation.navigate('Main', { screen: 'Home' });
+        navigation.navigate('Home');
       } else {
         const data = await response.json();
         setMessage(data.message || 'E-mail ou senha inválidos');

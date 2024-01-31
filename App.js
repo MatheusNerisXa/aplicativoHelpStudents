@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,7 +10,11 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false, // Remover o cabeçalho para as opções dentro de HomeStack
+    }}
+  >
     <Stack.Screen name="HomeStackScreen" component={Home} />
   </Stack.Navigator>
 );
@@ -17,6 +22,10 @@ const HomeStack = () => (
 const TabNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
+      tabBarLabel: ({ focused, color }) => {
+        let labelStyle = { color: focused ? 'blue' : 'black' };
+        return <Text style={labelStyle}>{route.name}</Text>;
+      },
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
 
@@ -31,7 +40,7 @@ const TabNavigator = () => (
             iconName = focused ? 'check' : 'check-outline';
             return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           case 'HelpGpt':
-            iconName = focused ?  'chat-question' : 'chat';
+            iconName = focused ? 'chat-question' : 'chat';
             return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           case 'Materias':
             iconName = focused ? 'book-open' : 'book-outline';
@@ -44,13 +53,12 @@ const TabNavigator = () => (
         }
       },
     })}
-   
   >
-    <Tab.Screen name="Ínicio" component={HomeStack} />
-    <Tab.Screen name="Tarefas" component={Home} />
-    <Tab.Screen name="HelpGpt" component={Home} />
-    <Tab.Screen name="Materias" component={Home} />
-    <Tab.Screen name="Menu" component={Home} />
+    <Tab.Screen name="Ínicio" component={HomeStack}  options={{ headerShown: false }}/>
+    <Tab.Screen name="Tarefas" component={Home} options={{ headerShown: false }} />
+    <Tab.Screen name="HelpGpt" component={Home} options={{ headerShown: false }}/>
+    <Tab.Screen name="Materias" component={Home} options={{ headerShown: false }} />
+    <Tab.Screen name="Menu" component={Home} options={{ headerShown: false }} />
   </Tab.Navigator>
 );
 
@@ -58,8 +66,18 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false } } />
-        <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Home"
+          component={TabNavigator}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' }, // Cor de fundo azul
+            headerTintColor: 'white', // Cor do texto branco
+            headerTitle: 'Home', // Título do cabeçalho para a tela "Ínicio"
+            headerLeft: null, // Remove o botão de voltar
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
