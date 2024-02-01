@@ -11,11 +11,15 @@ const Tab = createBottomTabNavigator();
 
 const HomeStack = () => (
   <Stack.Navigator
+    initialRouteName="HomeStackScreen"
     screenOptions={{
-      headerShown: false, // Remover o cabeçalho para as opções dentro de HomeStack
+      headerShown: false,
     }}
   >
-    <Stack.Screen name="HomeStackScreen" component={Home} />
+    <Stack.Screen
+      name="HomeStackScreen"
+      component={Home}
+    />
   </Stack.Navigator>
 );
 
@@ -23,7 +27,7 @@ const TabNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarLabel: ({ focused, color }) => {
-        let labelStyle = { color: focused ? 'blue' : 'black' };
+        let labelStyle = { color: focused ? '#253494' : 'black' };
         return <Text style={labelStyle}>{route.name}</Text>;
       },
       tabBarIcon: ({ focused, color, size }) => {
@@ -34,7 +38,6 @@ const TabNavigator = () => (
             iconName = focused ? 'home' : 'home';
             return <MaterialIcons name={iconName} size={size} color={color} />;
           case 'Cadastro':
-            // Não renderiza o ícone para 'Cadastro'
             return null;
           case 'Tarefas':
             iconName = focused ? 'check' : 'check-outline';
@@ -54,9 +57,9 @@ const TabNavigator = () => (
       },
     })}
   >
-    <Tab.Screen name="Ínicio" component={HomeStack}  options={{ headerShown: false }}/>
+    <Tab.Screen name="Ínicio" component={HomeStack} options={{ headerShown: false }} />
     <Tab.Screen name="Tarefas" component={Home} options={{ headerShown: false }} />
-    <Tab.Screen name="HelpGpt" component={Home} options={{ headerShown: false }}/>
+    <Tab.Screen name="HelpGpt" component={Home} options={{ headerShown: false }} />
     <Tab.Screen name="Materias" component={Home} options={{ headerShown: false }} />
     <Tab.Screen name="Menu" component={Home} options={{ headerShown: false }} />
   </Tab.Navigator>
@@ -72,10 +75,12 @@ export default function App() {
           component={TabNavigator}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: '#253494' }, // Cor de fundo azul
-            headerTintColor: 'white', // Cor do texto branco
-            headerTitle: 'Home', // Título do cabeçalho para a tela "Ínicio"
-            headerLeft: null, // Remove o botão de voltar
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            headerTitle: 'Home',
+            headerLeft: null,
+            gestureEnabled: false, // Disable swipe gesture
+
           }}
         />
         <Stack.Screen
@@ -83,9 +88,9 @@ export default function App() {
           component={Cadastro}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: '#253494' }, // Cor de fundo azul
-            headerTintColor: 'white', // Cor do texto branco
-            headerTitle: 'Cadastro', // Título do cabeçalho para a tela "Ínicio"
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            headerTitle: 'Cadastro',
           }}
         />
       </Stack.Navigator>
