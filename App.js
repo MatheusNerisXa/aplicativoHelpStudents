@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Home, Cadastro, Login } from './views';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Menu from './views/Menu/menu';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,7 +63,7 @@ const TabNavigator = () => (
     <Tab.Screen name="Tarefas" component={Home} options={{ headerShown: false }} />
     <Tab.Screen name="HelpGpt" component={Home} options={{ headerShown: false }} />
     <Tab.Screen name="Materias" component={Home} options={{ headerShown: false }} />
-    <Tab.Screen name="Menu" component={Home} options={{ headerShown: false }} />
+    <Tab.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
   </Tab.Navigator>
 );
 

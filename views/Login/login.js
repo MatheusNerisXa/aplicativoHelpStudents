@@ -23,14 +23,15 @@ export default function Login({ navigation }) {
       const userDataString = await AsyncStorage.getItem('userData');
       if (userDataString) {
         navigation.replace('Home');
+      } else {
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error checking previous login:', error);
-    } finally {
-      setIsLoading(false); // Marcar o carregamento como concluído, independentemente do resultado
+      setIsLoading(false);
     }
   };
-
+  
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Iniciar o carregamento
