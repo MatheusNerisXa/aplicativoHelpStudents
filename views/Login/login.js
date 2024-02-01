@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
 import loginStyles from './css/loginStyles';
 import config from '../../config/config.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
   const [user, setUser] = useState('');
@@ -11,9 +12,29 @@ export default function Login({ navigation }) {
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Novo estado para controle de carregamento
+
+  useEffect(() => {
+    checkPreviousLogin();
+  }, []);
+
+  const checkPreviousLogin = async () => {
+    try {
+      const userDataString = await AsyncStorage.getItem('userData');
+      if (userDataString) {
+        navigation.replace('Home');
+      }
+    } catch (error) {
+      console.error('Error checking previous login:', error);
+    } finally {
+      setIsLoading(false); // Marcar o carregamento como concluído, independentemente do resultado
+    }
+  };
 
   const handleLogin = async () => {
     try {
+      setIsLoading(true); // Iniciar o carregamento
+
       let response = await fetch(config.urlRootNode + 'login', {
         method: 'POST',
         headers: {
@@ -21,22 +42,25 @@ export default function Login({ navigation }) {
         },
         body: JSON.stringify({ emailUser: user, passwordUser: password }),
       });
-  
+
       if (response.ok) {
-        navigation.navigate('Home');
+        const userData = { email: user };
+        await AsyncStorage.setItem('userData', JSON.stringify(userData));
+        navigation.replace('Home');
       } else {
         const data = await response.json();
         setMessage(data.message || 'E-mail ou senha inválidos');
-        showErrorModal(); // Exibir o modal de erro
+        showErrorModal();
       }
     } catch (error) {
       console.error('Error during login:', error);
       setMessage('An error occurred during login');
-      showErrorModal(); // Exibir o modal de erro
+      showErrorModal();
+    } finally {
+      setIsLoading(false); // Marcar o carregamento como concluído, independentemente do resultado
     }
   };
-  
-  
+
   const showErrorModal = () => {
     setIsErrorModalVisible(true);
   };
@@ -49,6 +73,14 @@ export default function Login({ navigation }) {
     navigation.navigate('Cadastro');
   };
 
+  if (isLoading) {
+    return (
+      <View style={[loginStyles.container, loginStyles.loadingContainer]}>
+        <ActivityIndicator size="large" color="#253494" />
+      </View>
+    );
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -57,6 +89,7 @@ export default function Login({ navigation }) {
       <View style={loginStyles.logo__container}>
         <Image source={require('../../assets/img/logo.png')} style={{ width: 210, height: 180 }} />
       </View>
+
 
       <View style={loginStyles.inputContainer}>
         <Text style={loginStyles.label}>Email:</Text>
@@ -93,7 +126,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity style={loginStyles.linkButton} onPress={navigateToSignUp}>
           <Text style={loginStyles.linkButtonText}>Cadastre-se</Text>
         </TouchableOpacity>
-        <Text style={{ color: '#FFF', fontSize: 16, marginHorizontal: 1 , marginTop: 7}}>|</Text>
+        <Text style={{ color: '#FFF', fontSize: 16, marginHorizontal: 1, marginTop: 7 }}>|</Text>
         <TouchableOpacity style={loginStyles.linkButton}>
           <Text style={loginStyles.linkButtonText}>Recuperar Senha</Text>
         </TouchableOpacity>

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Home, Cadastro, Login } from './views';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,9 +67,26 @@ const TabNavigator = () => (
 );
 
 export default function App() {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
+  useEffect(() => {
+    checkPreviousLogin();
+  }, []);
+
+  const checkPreviousLogin = async () => {
+    try {
+      const userDataString = await AsyncStorage.getItem('userData');
+      if (userDataString) {
+        setIsUserLoggedIn(true);
+      }
+    } catch (error) {
+      console.error('Error checking previous login:', error);
+    }
+  };
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName={isUserLoggedIn ? 'Home' : 'Login'}>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen
           name="Home"
@@ -79,8 +97,7 @@ export default function App() {
             headerTintColor: 'white',
             headerTitle: 'Home',
             headerLeft: null,
-            gestureEnabled: false, // Disable swipe gesture
-
+            gestureEnabled: false,
           }}
         />
         <Stack.Screen
