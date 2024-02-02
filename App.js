@@ -7,6 +7,7 @@ import { Home, Cadastro, Login } from './views';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Menu from './views/Menu/menu';
+import NewsScreen from './views/News/news';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -111,6 +112,17 @@ export default function App() {
             headerTitle: 'Cadastro',
           }}
         />
+        <Stack.Screen
+          name="NewsScreen"
+          component={NewsScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            headerTitle: 'Notícias',
+          }}
+        />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

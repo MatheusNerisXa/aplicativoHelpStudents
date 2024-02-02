@@ -4,6 +4,8 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const model = require('./models');
+const { News } = require('./models');
+
 
 let app = express();
 app.use(cors());
@@ -82,6 +84,20 @@ app.post('/login', async (req, res) => {
         res.status(500).send(JSON.stringify('Erro durante o login.'));
     }
 });
+
+app.get('/news', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /news');
+        const news = await News.findAll();
+        console.log('Notícias obtidas com sucesso:', news);
+        res.json(news);
+    } catch (error) {
+        console.error('Erro ao obter notícias:', error);
+        res.status(500).json({ error: 'Erro ao obter notícias.' });
+    }
+});
+
+
 
 // Start Server
 let port = process.env.PORT || 3000;

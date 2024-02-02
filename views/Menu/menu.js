@@ -23,6 +23,7 @@ const Menu = () => {
     { icon: 'book-open-variant', text: 'Matérias', color: '#3498db' },
     { icon: 'format-list-bulleted', text: 'Tarefas', color: '#e74c3c' },
     { icon: 'help-network', text: 'Ajuda', color: '#2ecc71' },
+    { icon: 'newspaper', text: 'Notícias', color: '#27ae60' },
     { icon: 'logout', text: 'Sair', color: '#9b59b6' },
   ];
 
@@ -42,9 +43,9 @@ const Menu = () => {
       </View>
 
       <View style={styles.row}>
-        {menuItems.slice(2).map((item, index) => (
+        {menuItems.slice(2, 4).map((item, index) => (
           <TouchableOpacity
-            key={index}
+            key={index + 2}
             style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
             onPress={() => (item.text !== 'Sair' ? navigation.navigate(item.text) : handleLogout())}
           >
@@ -53,6 +54,16 @@ const Menu = () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      <View style={styles.row}>
+  <TouchableOpacity
+    style={[styles.menuItem, styles.fullWidth, { backgroundColor: menuItems[3].color }]}
+    onPress={() => navigation.navigate('NewsScreen')}
+  >
+    <MaterialCommunityIcons name={menuItems[3].icon} size={24} color="#fff" />
+    <Text style={styles.menuText}>{menuItems[3].text}</Text>
+  </TouchableOpacity>
+</View>
     </View>
   );
 };
@@ -79,7 +90,10 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   halfWidth: {
-    width: '50%',
+    width: '49%',  // Ajustando o tamanho para evitar quebras de linha
+  },
+  fullWidth: {
+    width: '100%',
   },
   menuText: {
     color: '#fff',
