@@ -1,7 +1,7 @@
-// news.js
+// NewsScreen.js
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Text, TextInput, StyleSheet, RefreshControl } from 'react-native';
+import { View, Text, TextInput, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { Title } from 'react-native-paper';
 import NewsCard from './newsCard'; // Caminho corrigido
 import config from '../../config/config.json';
@@ -69,26 +69,32 @@ const NewsScreen = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
+      showsVerticalScrollIndicator={false}
     >
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Buscar por título"
-        value={searchText}
-        onChangeText={text => setSearchText(text)}
-      />
-      {filteredNews.length > 0 ? (
-        filteredNews.map((item, index) => (
-          <NewsCard key={index} news={item} />
-        ))
-      ) : (
-        <Text>Nenhuma notícia correspondente encontrada</Text>
-      )}
+      <View style={styles.contentContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar por título"
+          value={searchText}
+          onChangeText={text => setSearchText(text)}
+        />
+        {filteredNews.length > 0 ? (
+          filteredNews.map((item, index) => (
+            <NewsCard key={index} news={item} />
+          ))
+        ) : (
+          <Text>Nenhuma notícia correspondente encontrada</Text>
+        )}
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  contentContainer: {
     padding: 16,
   },
  
@@ -99,6 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingLeft: 10,
     borderRadius: 8,
+    fontSize: 16,
   },
 });
 
