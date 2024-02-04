@@ -8,7 +8,7 @@ const NewsCard = ({ news }) => {
       <Image source={{ uri: news.coverImage }} style={styles.image} />
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{news.title}</Text>
-        <Text style={styles.createdAt}>{formatDate(news.createdAt)}</Text>
+        <Text style={styles.publishedAt}>{`Publicado em: ${formatDate(news.createdAt)}`}</Text>
       </View>
     </View>
   );
@@ -21,7 +21,7 @@ const formatDate = (date) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
+    borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 16,
     elevation: 5,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   image: {
-    height: 200,
+    height: 150,
     width: '100%',
   },
   contentContainer: {
@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 10,
     color: '#253494',
     textAlign: 'center',
   },
-  createdAt: {
+  publishedAt: {
     fontSize: 14,
     color: '#888',
     textAlign: 'center',

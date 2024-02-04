@@ -1,70 +1,106 @@
 // news.js
 
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, ScrollView, Text, TextInput, StyleSheet, RefreshControl } from 'react-native';
 import { Title } from 'react-native-paper';
-import NewsCard from './newsCard'; // Corrigido o caminho
+import NewsCard from './newsCard'; // Caminho corrigido
 import config from '../../config/config.json';
-
 
 const NewsScreen = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(config.urlRootNode + 'news');
+      const data = await response.json();
+
+      console.log('Dados recebidos da API:', data);
+
+      if (data.error) {
+        console.error('Erro ao obter notícias:', data.error);
+      } else {
+        setNews(data);
+      }
+
+      setLoading(false);
+      setRefreshing(false);
+    } catch (error) {
+      console.error('Erro ao obter notícias:', error);
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
 
   useEffect(() => {
-    fetch(config.urlRootNode + 'news')
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          console.error('Error fetching news:', data.error);
-          setLoading(false);
-        } else {
-          setNews(data);
-          setLoading(false);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching news:', error);
-        setLoading(false);
-      });
-  }, []);
-  
-  
-  
+    fetchData();
+  }, [fetchData]);
+
+  const filteredNews = news.filter(item =>
+    item.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
+      <View style={styles.container}>
+        <Text>Carregando...</Text>
       </View>
     );
   }
-  
+
   if (!Array.isArray(news)) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Error loading news</Text>
+      <View style={styles.container}>
+        <Text>Erro ao carregar notícias</Text>
       </View>
     );
   }
-  
-  // Restante do código para renderizar as notícias
-  
 
   return (
-    <ScrollView>
-      <View style={{ padding: 16 }}>
-        <Title>Latest News</Title>
-        {Array.isArray(news) ? (
-          news.map((item, index) => (
-            <NewsCard key={index} news={item} />
-          ))
-        ) : (
-          <Text>No news available</Text>
-        )}
-      </View>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+    >
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Buscar por título"
+        value={searchText}
+        onChangeText={text => setSearchText(text)}
+      />
+      {filteredNews.length > 0 ? (
+        filteredNews.map((item, index) => (
+          <NewsCard key={index} news={item} />
+        ))
+      ) : (
+        <Text>Nenhuma notícia correspondente encontrada</Text>
+      )}
     </ScrollView>
   );
-        }
-  
-  // Export the React component
-  export default NewsScreen;
+};
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+ 
+  searchInput: {
+    height: 40,
+    borderColor: '#253494',
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingLeft: 10,
+    borderRadius: 8,
+  },
+});
+
+// Exportar o componente React
+export default NewsScreen;
