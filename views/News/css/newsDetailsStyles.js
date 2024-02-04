@@ -21,6 +21,7 @@ export const newsDetailsStyles = StyleSheet.create({
     color: '#253494',
     fontSize: 24,
     marginTop: 20,
+    marginBottom: 16,
     fontWeight: 'bold',
     textAlign: 'center', // Centraliza o texto
   },
