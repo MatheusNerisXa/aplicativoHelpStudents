@@ -8,6 +8,7 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Menu from './views/Menu/menu';
 import NewsScreen from './views/News/news';
+import NewsDetails from './views/News/NewsDetails';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,7 +27,7 @@ const HomeStack = () => (
   </Stack.Navigator>
 );
 
-const TabNavigator = ({ route }) => {
+const TabNavigator = ({ route, navigation }) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const TabNavigator = ({ route }) => {
         },
       })}
     >
-      <Tab.Screen
+        <Tab.Screen
         name="Ínicio"
         component={HomeStack}
         options={{
@@ -120,7 +121,7 @@ const TabNavigator = ({ route }) => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" headerMode="none">
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={TabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
@@ -142,7 +143,25 @@ export default function App() {
             ),
           })}
         />
-        </Stack.Navigator>
+        <Stack.Screen
+          name="NewsDetails"
+          component={NewsDetails}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Detalhes da Notícia',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
