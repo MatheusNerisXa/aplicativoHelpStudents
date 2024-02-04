@@ -1,9 +1,8 @@
 // NewsScreen.js
-
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, ScrollView, RefreshControl, StyleSheet } from 'react-native';
-import { Title } from 'react-native-paper';
+import { View, Text, TextInput, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
 import NewsCard from './newsCard'; // Caminho corrigido
+import { newsStyles } from "../News/css/newsStyles";
 import config from '../../config/config.json';
 
 const NewsScreen = () => {
@@ -49,15 +48,16 @@ const NewsScreen = () => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text>Carregando...</Text>
+      <View style={news.container}>
+        <ActivityIndicator size="large" color="#253494" />
+        <Text style={newsStyles.loadingText}>Carregando...</Text>
       </View>
     );
   }
 
   if (!Array.isArray(news)) {
     return (
-      <View style={styles.container}>
+      <View style={newsStyles.container}>
         <Text>Erro ao carregar notícias</Text>
       </View>
     );
@@ -65,15 +65,15 @@ const NewsScreen = () => {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={news.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.contentContainer}>
+      <View style={newsStyles.contentContainer}>
         <TextInput
-          style={styles.searchInput}
+          style={newsStyles.searchInput}
           placeholder="Buscar por título"
           value={searchText}
           onChangeText={text => setSearchText(text)}
@@ -89,25 +89,6 @@ const NewsScreen = () => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    padding: 16,
-  },
- 
-  searchInput: {
-    height: 40,
-    borderColor: '#253494',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingLeft: 10,
-    borderRadius: 8,
-    fontSize: 16,
-  },
-});
 
 // Exportar o componente React
 export default NewsScreen;
