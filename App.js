@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Menu from './views/Menu/menu';
 import NewsScreen from './views/News/news';
 import NewsDetails from './views/News/NewsDetails';
+import ChatScreen from './views/helpgpt/chat';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,8 +97,13 @@ const TabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="HelpGpt"
-        component={Home}
-        options={{ headerShown: false }}
+        component={ChatScreen}
+        options={{
+          headerShown: route.state && route.state.index > 0 ? false : true,
+          headerStyle: { backgroundColor: '#253494' },
+          headerTintColor: 'white',
+          title: 'HelpGpt',
+        }}
       />
       <Tab.Screen
         name="Materias"
