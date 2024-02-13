@@ -40,6 +40,7 @@ const Menu = () => {
     { icon: 'format-list-bulleted', text: 'Tarefas', color: '#e74c3c' },
     { icon: 'help-network', text: 'Ajuda', color: '#2ecc71' },
     { icon: 'newspaper', text: 'Notícias', color: '#27ae60' },
+    { icon: 'video', text: 'Vídeos', color: '#f39c12' }, // Novo item
     { icon: 'logout', text: 'Sair', color: '#9b59b6' },
   ];
 
@@ -72,13 +73,16 @@ const Menu = () => {
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity
-          style={[styles.menuItem, styles.fullWidth, { backgroundColor: menuItems[4].color }]}
-          onPress={() => (menuItems[4].text !== 'Sair' ? navigation.navigate(menuItems[4].text) : handleLogout())}
-        >
-          <MaterialCommunityIcons name={menuItems[4].icon} size={24} color="#fff" />
-          <Text style={styles.menuText}>{menuItems[4].text}</Text>
-        </TouchableOpacity>
+        {menuItems.slice(4, 6).map((item, index) => (
+          <TouchableOpacity
+            key={index + 4}
+            style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
+            onPress={() => (item.text !== 'Sair' ? navigation.navigate(item.text) : handleLogout())}
+          >
+            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
+            <Text style={styles.menuText}>{item.text}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
