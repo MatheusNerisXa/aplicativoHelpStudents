@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Home, Cadastro, Login } from './views';
@@ -45,6 +45,10 @@ const TabNavigator = ({ route, navigation }) => {
     } catch (error) {
       console.error('Error checking previous login:', error);
     }
+  };
+
+  const handleGoBackToMenu = () => {
+    navigation.navigate('Menu');
   };
 
   return (
@@ -122,17 +126,27 @@ const TabNavigator = ({ route, navigation }) => {
         }}
       />
       <Tab.Screen
-      name="Notícias"
-      component={NewsScreen}
-      options={{
-        tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
-        headerShown: route.state && route.state.index > 0 ? false : true,
-        headerStyle: { backgroundColor: '#253494' },
-        headerTintColor: 'white',
-        tabBarLabel: '', // Remove o título da guia
-        tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
-      }}
-    />
+        name="Notícias"
+        component={NewsScreen}
+        options={({ navigation }) => ({
+          tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
+          headerShown: true,
+          headerStyle: { backgroundColor: '#253494' },
+          headerTintColor: 'white',
+          tabBarLabel: '', // Remove o título da guia
+          tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+          gestureEnabled: true, // Permite o gesto de voltar
+          gestureDirection: "horizontal-inverted", // Define a direção do gesto de volta
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 16 }}
+              onPress={handleGoBackToMenu}
+            >
+              <MaterialIcons name="arrow-back" size={24} color="white" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Tab.Navigator>
   );
 };
@@ -162,7 +176,7 @@ export default function App() {
             ),
           })}
         />
-        <Stack.Screen
+          <Stack.Screen
           name="NewsScreen"
           component={NewsScreen}
           options={({ navigation }) => ({
@@ -180,6 +194,7 @@ export default function App() {
             ),
           })}
         />
+       
         <Stack.Screen
           name="NewsDetails"
           component={NewsDetails}
