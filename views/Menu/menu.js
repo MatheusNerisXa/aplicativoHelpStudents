@@ -12,9 +12,11 @@ const Menu = () => {
       handleLogout();
     } else if (menuItem === 'Vídeos') {
       navigation.navigate('VideoScreen');
-    }else if (menuItem === 'Notícias') {
+    } else if (menuItem === 'Notícias') {
       navigation.navigate('NewsScreen');
-    }  
+    } else if (menuItem === 'Vestibulares') {
+      navigation.navigate('EntranceExamScreen');
+    } 
     else {
       navigation.navigate(menuItem);
     }
@@ -54,6 +56,8 @@ const Menu = () => {
     { icon: 'help-network', text: 'Ajuda', color: '#2ecc71' },
     { icon: 'newspaper', text: 'Notícias', color: '#27ae60' },
     { icon: 'video', text: 'Vídeos', color: '#f39c12' },
+    { icon: 'account-convert', text: 'Vestibulares', color: '#9b59b6' }, // Adicionando o item "Vestibulares"
+    { icon: 'file-document', text: 'Arquivos', color: '#34495e' }, // Adicionando o item "Arquivos"
     { icon: 'logout', text: 'Sair', color: '#9b59b6' },
   ];
 
@@ -63,7 +67,7 @@ const Menu = () => {
         {menuItems.slice(0, 2).map((item, index) => (
           <TouchableOpacity
             key={index}
-            style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
+            style={[styles.menuItem, { backgroundColor: item.color }]}
             onPress={() => handleMenuItemPress(item.text)}
           >
             <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
@@ -71,12 +75,11 @@ const Menu = () => {
           </TouchableOpacity>
         ))}
       </View>
-
       <View style={styles.row}>
         {menuItems.slice(2, 4).map((item, index) => (
           <TouchableOpacity
             key={index + 2}
-            style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
+            style={[styles.menuItem, { backgroundColor: item.color }]}
             onPress={() => handleMenuItemPress(item.text)}
           >
             <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
@@ -84,12 +87,23 @@ const Menu = () => {
           </TouchableOpacity>
         ))}
       </View>
-
       <View style={styles.row}>
         {menuItems.slice(4, 6).map((item, index) => (
           <TouchableOpacity
             key={index + 4}
-            style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
+            style={[styles.menuItem, { backgroundColor: item.color }]}
+            onPress={() => handleMenuItemPress(item.text)}
+          >
+            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
+            <Text style={styles.menuText}>{item.text}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.row}>
+        {menuItems.slice(6, 8).map((item, index) => (
+          <TouchableOpacity
+            key={index + 6}
+            style={[styles.menuItem, { backgroundColor: item.color }]}
             onPress={() => handleMenuItemPress(item.text)}
           >
             <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
@@ -121,12 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
     margin: 4,
-  },
-  halfWidth: {
-    width: '49%',  // Ajustando o tamanho para evitar quebras de linha
-  },
-  fullWidth: {
-    width: '100%',
+    width: '48%', // Ajustando o tamanho para permitir espaço entre os itens
   },
   menuText: {
     color: '#fff',

@@ -109,6 +109,18 @@ app.get('/videos', async (req, res) => {
     }
 });
 
+app.get('/entranceExams', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /entranceExams');
+        const entranceExams = await model.EntranceExam.findAll();
+        console.log('Vestibulares obtidos com sucesso:', entranceExams);
+        res.json(entranceExams);
+    } catch (error) {
+        console.error('Erro ao obter vestibulares:', error);
+        res.status(500).json({ error: 'Erro ao obter vestibulares.' });
+    }
+});
+
 // Start Server
 let port = process.env.PORT || 3000;
 app.listen(port, (req, res) => {

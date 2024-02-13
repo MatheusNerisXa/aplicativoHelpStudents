@@ -11,6 +11,8 @@ import NewsScreen from './views/News/news';
 import NewsDetails from './views/News/NewsDetails';
 import ChatScreen from './views/helpgpt/chat';
 import VideoScreen from './views/videos/videos';
+import EntranceExamScreen from './views/EntranceExam/Entrance_exam';
+import EntranceExamDetailScreen from './views/EntranceExam/EntranceExamDetailScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -177,6 +179,42 @@ export default function App() {
         <Stack.Screen
           name="NewsDetails"
           component={NewsDetails}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Detalhes da Notícia',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+         <Stack.Screen
+          name="EntranceExamScreen"
+          component={EntranceExamScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Detalhes da Notícia',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="EntranceExamDetailScreen"
+          component={EntranceExamDetailScreen}
           options={{
             headerShown: true,
             headerStyle: { backgroundColor: '#253494' },
