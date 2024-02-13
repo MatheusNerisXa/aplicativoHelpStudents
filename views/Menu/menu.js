@@ -1,6 +1,5 @@
-// Menu.js
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,14 +8,31 @@ const Menu = () => {
   const navigation = useNavigation();
 
   const handleLogout = async () => {
-    try {
-      // Remover os dados de login do AsyncStorage
-      await AsyncStorage.removeItem('userData');
-      // Navegar de volta para a tela de login
-      navigation.replace('Login');
-    } catch (error) {
-      console.error('Error during logout:', error);
-    }
+    Alert.alert(
+      'Confirmação',
+      'Tem certeza que deseja sair?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Sair',
+          onPress: async () => {
+            try {
+              // Remover os dados de login do AsyncStorage
+              await AsyncStorage.removeItem('userData');
+              // Navegar de volta para a tela de login
+              navigation.replace('Login');
+            } catch (error) {
+              console.error('Error during logout:', error);
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const menuItems = [
