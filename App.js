@@ -55,25 +55,25 @@ const TabNavigator = ({ route, navigation }) => {
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-
+  
           switch (route.name) {
             case 'Ínicio':
               iconName = focused ? 'home' : 'home';
-              return <MaterialIcons name={iconName} size={size} color={color} />;
+              return <MaterialIcons name={iconName} size={size} color={focused ? '#253494' : color} />;
             case 'Cadastro':
               return null;
             case 'Tarefas':
               iconName = focused ? 'check' : 'check-outline';
-              return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+              return <MaterialCommunityIcons name={iconName} size={size} color={focused ? '#253494' : color} />;
             case 'HelpGpt':
               iconName = focused ? 'chat-question' : 'chat';
-              return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+              return <MaterialCommunityIcons name={iconName} size={size} color={focused ? '#253494' : color} />;
             case 'Materias':
               iconName = focused ? 'book-open' : 'book-outline';
-              return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+              return <MaterialCommunityIcons name={iconName} size={size} color={focused ? '#253494' : color} />;
             case 'Menu':
               iconName = focused ? 'clipboard-list' : 'clipboard-minus';
-              return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+              return <MaterialCommunityIcons name={iconName} size={size} color={focused ? '#253494' : color} />;
             default:
               return null;
           }
@@ -120,18 +120,30 @@ const TabNavigator = ({ route, navigation }) => {
           title: 'Menu',
         }}
       />
-  <Tab.Screen
-  name="Notícias"
-  component={NewsScreen}
-  options={{
-    tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
-    headerShown: route.state && route.state.index > 0 ? false : true,
-    headerStyle: { backgroundColor: '#253494' },
-    headerTintColor: 'white',
-    tabBarLabel: '', // Remove o título da guia
-    tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
-  }}
-/>
+      <Tab.Screen
+      name="Notícias"
+      component={NewsScreen}
+      options={{
+        tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
+        headerShown: route.state && route.state.index > 0 ? false : true,
+        headerStyle: { backgroundColor: '#253494' },
+        headerTintColor: 'white',
+        tabBarLabel: '', // Remove o título da guia
+        tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+      }}
+    />
+     <Tab.Screen
+      name="Detalhes da Notícia"
+      component={NewsDetails}
+      options={{
+        tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
+        headerShown: route.state && route.state.index > 0 ? false : true,
+        headerStyle: { backgroundColor: '#253494' },
+        headerTintColor: 'white',
+        tabBarLabel: '', // Remove o título da guia
+        tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+      }}
+    />
     </Tab.Navigator>
   );
 };
