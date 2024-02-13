@@ -132,18 +132,6 @@ const TabNavigator = ({ route, navigation }) => {
         tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
       }}
     />
-     <Tab.Screen
-      name="Detalhes da Notícia"
-      component={NewsDetails}
-      options={{
-        tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
-        headerShown: route.state && route.state.index > 0 ? false : true,
-        headerStyle: { backgroundColor: '#253494' },
-        headerTintColor: 'white',
-        tabBarLabel: '', // Remove o título da guia
-        tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
-      }}
-    />
     </Tab.Navigator>
   );
 };
