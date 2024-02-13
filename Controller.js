@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const model = require('./models');
 const { News } = require('./models');
-
+const { Video } = require('./models');
 
 let app = express();
 app.use(cors());
@@ -97,7 +97,17 @@ app.get('/news', async (req, res) => {
     }
 });
 
-
+app.get('/videos', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /videos');
+        const videos = await Video.findAll();
+        console.log('Vídeos obtidos com sucesso:', videos);
+        res.json(videos);
+    } catch (error) {
+        console.error('Erro ao obter vídeos:', error);
+        res.status(500).json({ error: 'Erro ao obter vídeos.' });
+    }
+});
 
 // Start Server
 let port = process.env.PORT || 3000;

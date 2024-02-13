@@ -10,6 +10,7 @@ import Menu from './views/Menu/menu';
 import NewsScreen from './views/News/news';
 import NewsDetails from './views/News/NewsDetails';
 import ChatScreen from './views/helpgpt/chat';
+import VideoScreen from './views/videos/videos';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -143,6 +144,24 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={TabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} screenOptions={{ headerShown: true }} />
+        <Stack.Screen
+          name="VideoScreen"
+          component={VideoScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Vídeos',
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={() => navigation.goBack()}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
         <Stack.Screen
           name="NewsScreen"
           component={NewsScreen}

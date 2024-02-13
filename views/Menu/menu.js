@@ -7,6 +7,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const Menu = () => {
   const navigation = useNavigation();
 
+  const handleMenuItemPress = (menuItem) => {
+    if (menuItem === 'Sair') {
+      handleLogout();
+    } else if (menuItem === 'Vídeos') {
+      navigation.navigate('VideoScreen');
+    } else {
+      navigation.navigate(menuItem);
+    }
+  };
+
   const handleLogout = async () => {
     Alert.alert(
       'Confirmação',
@@ -40,7 +50,7 @@ const Menu = () => {
     { icon: 'format-list-bulleted', text: 'Tarefas', color: '#e74c3c' },
     { icon: 'help-network', text: 'Ajuda', color: '#2ecc71' },
     { icon: 'newspaper', text: 'Notícias', color: '#27ae60' },
-    { icon: 'video', text: 'Vídeos', color: '#f39c12' }, // Novo item
+    { icon: 'video', text: 'Vídeos', color: '#f39c12' },
     { icon: 'logout', text: 'Sair', color: '#9b59b6' },
   ];
 
@@ -51,7 +61,7 @@ const Menu = () => {
           <TouchableOpacity
             key={index}
             style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
-            onPress={() => (item.text !== 'Sair' ? navigation.navigate(item.text) : handleLogout())}
+            onPress={() => handleMenuItemPress(item.text)}
           >
             <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
             <Text style={styles.menuText}>{item.text}</Text>
@@ -64,7 +74,7 @@ const Menu = () => {
           <TouchableOpacity
             key={index + 2}
             style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
-            onPress={() => (item.text !== 'Sair' ? navigation.navigate(item.text) : handleLogout())}
+            onPress={() => handleMenuItemPress(item.text)}
           >
             <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
             <Text style={styles.menuText}>{item.text}</Text>
@@ -77,7 +87,7 @@ const Menu = () => {
           <TouchableOpacity
             key={index + 4}
             style={[styles.menuItem, styles.halfWidth, { backgroundColor: item.color }]}
-            onPress={() => (item.text !== 'Sair' ? navigation.navigate(item.text) : handleLogout())}
+            onPress={() => handleMenuItemPress(item.text)}
           >
             <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
             <Text style={styles.menuText}>{item.text}</Text>

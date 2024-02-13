@@ -1,23 +1,17 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Video extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      // Defina as associações aqui, se houver
     }
   }
   Video.init({
     title: DataTypes.STRING,
     videoLink: DataTypes.STRING,
     coverImage: DataTypes.STRING,
-    matter: DataTypes.STRING
+    matter: DataTypes.STRING // Se você quiser associar vídeos a matérias
   }, {
     sequelize,
     modelName: 'Video',
