@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, FlatList, Platform } from 'react-native';
 import axios from 'axios';
 import WebView from 'react-native-webview';
 import config from '../../config/config.json';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const VideoScreen = () => {
   const [videos, setVideos] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
   const [filter, setFilter] = useState('');
-  const [matterFilter, setMatterFilter] = useState('');
+  const [filterType, setFilterType] = useState('title');
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   useEffect(() => {
@@ -18,24 +20,28 @@ const VideoScreen = () => {
   const fetchVideos = async () => {
     try {
       const response = await axios.get(config.urlRootNode + 'videos');
-      setVideos(response.data);
-      setFilteredVideos(response.data);
+      const updatedVideos = response.data.map(video => ({
+        ...video,
+        coverImage: `https://img.youtube.com/vi/${getVideoId(video.videoLink)}/0.jpg`
+      }));
+      setVideos(updatedVideos);
+      setFilteredVideos(updatedVideos);
     } catch (error) {
       console.error('Erro ao buscar vídeos:', error);
     }
   };
 
+  const getVideoId = (videoLink) => {
+    const videoId = videoLink.split('v=')[1];
+    return videoId.split('&')[0];
+  };
+
   const handleFilter = () => {
     let filtered = videos.filter(video => {
-      if (filter && matterFilter) {
-        return video.title.toLowerCase().includes(filter.toLowerCase()) && video.matter.toLowerCase() === matterFilter.toLowerCase();
-      } else if (filter) {
-        return video.title.toLowerCase().includes(filter.toLowerCase());
-      } else if (matterFilter) {
-        return video.matter.toLowerCase() === matterFilter.toLowerCase();
-      } else {
-        return true;
-      }
+      const searchValue = filter.toLowerCase();
+      const title = video.title.toLowerCase();
+      const matter = video.matter.toLowerCase();
+      return title.includes(searchValue) || matter.includes(searchValue);
     });
     setFilteredVideos(filtered);
   };
@@ -46,23 +52,38 @@ const VideoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Filtrar por título"
-        value={filter}
-        onChangeText={text => setFilter(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Filtrar por matter"
-        value={matterFilter}
-        onChangeText={text => setMatterFilter(text)}
-      />
-      <Button title="Filtrar" onPress={handleFilter} />
+      <View style={styles.filterContainer}>
+        <View style={styles.searchBar}>
+          <TextInput
+            style={styles.input}
+            placeholder="Pesquisar"
+            value={filter}
+            onChangeText={text => setFilter(text)}
+            placeholderTextColor="#FFF"
+          />
+          <TouchableOpacity
+            style={styles.searchIcon}
+            onPress={handleFilter}>
+            <Ionicons name="search" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.filterOptionContainer}>
+          <TouchableOpacity
+            style={[styles.filterOption, filterType === 'title' && styles.activeFilterOption]}
+            onPress={() => setFilterType('title')}>
+            <Text style={styles.filterOptionText}>Título</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterOption, filterType === 'matter' && styles.activeFilterOption]}
+            onPress={() => setFilterType('matter')}>
+            <Text style={styles.filterOptionText}>Matéria</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       {selectedVideo && (
         <WebView
           source={{ uri: selectedVideo.videoLink }}
-          style={styles.video}
+          style={[styles.video, { marginTop: 20, marginBottom: 20, borderColor: '#253494', borderWidth: 1 }]}
         />
       )}
       <FlatList
@@ -70,13 +91,21 @@ const VideoScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.itemContainer} onPress={() => handleVideoPress(item)}>
-            <Image source={{ uri: item.coverImage }} style={styles.image} />
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.matter}>{item.matter}</Text>
+            <View style={styles.card}>
+              <Image source={{ uri: item.coverImage }} style={styles.image} />
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>{item.title}</Text>
+                <View style={styles.bottomContainer}>
+                  <View style={styles.matterContainer}>
+                    <MaterialIcons name="school" size={18} color="#253494" style={styles.categoryIcon} />
+                    <Text style={styles.matter}>{item.matter}</Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </TouchableOpacity>
         )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </View>
   );
@@ -85,24 +114,69 @@ const VideoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f0f0f0',
     padding: 20,
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+  filterContainer: {
+    marginBottom: 20,
   },
-  itemContainer: {
+  searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    backgroundColor: '#253494',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
+    fontFamily: 'Arial',
+    fontSize: 14,
+    color: '#fff',
+  },
+  searchIcon: {
+    padding: 10,
+  },
+  filterOptionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  filterOption: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginHorizontal: 5,
+    backgroundColor: '#ff9800',
+    borderRadius: 20,
+  },
+  activeFilterOption: {
+    backgroundColor: '#ff5722',
+  },
+  filterOptionText: {
+    color: '#fff',
+    fontFamily: 'Arial',
+    fontSize: 14,
+  },
+  itemContainer: {
+    marginBottom: 10,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    borderColor: '#253494',
+    borderWidth: 1,
   },
   image: {
     width: 80,
     height: 80,
     marginRight: 10,
+    borderRadius: 5,
   },
   textContainer: {
     flex: 1,
@@ -110,15 +184,36 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#333',
+    fontFamily: 'Arial',
+  },
+  bottomContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  matterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   matter: {
     fontSize: 14,
-    color: 'gray',
+    color: '#666',
+    fontFamily: 'Arial',
+    marginLeft: 5,
+  },
+  categoryIcon: {
+    marginRight: 5,
   },
   video: {
     flex: 1,
-    marginTop: 20,
-    height: 200, // Defina a altura conforme necessário
+    height: Platform.OS === 'ios' ? 200 : 300, // Adjust as needed for Android
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  separator: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
 
