@@ -12,7 +12,10 @@ const Menu = () => {
       handleLogout();
     } else if (menuItem === 'Vídeos') {
       navigation.navigate('VideoScreen');
-    } else {
+    }else if (menuItem === 'Notícias') {
+      navigation.navigate('NewsScreen');
+    }  
+    else {
       navigation.navigate(menuItem);
     }
   };

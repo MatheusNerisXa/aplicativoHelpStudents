@@ -125,28 +125,7 @@ const TabNavigator = ({ route, navigation }) => {
           title: 'Menu',
         }}
       />
-      <Tab.Screen
-        name="Notícias"
-        component={NewsScreen}
-        options={({ navigation }) => ({
-          tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
-          headerShown: true,
-          headerStyle: { backgroundColor: '#253494' },
-          headerTintColor: 'white',
-          tabBarLabel: '', // Remove o título da guia
-          tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
-          gestureEnabled: true, // Permite o gesto de voltar
-          gestureDirection: "horizontal-inverted", // Define a direção do gesto de volta
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{ marginLeft: 16 }}
-              onPress={handleGoBackToMenu}
-            >
-              <MaterialIcons name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
-          ),
-        })}
-      />
+    
     </Tab.Navigator>
   );
 };
