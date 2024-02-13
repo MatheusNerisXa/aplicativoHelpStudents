@@ -80,7 +80,7 @@ const TabNavigator = ({ route, navigation }) => {
         },
       })}
     >
-        <Tab.Screen
+      <Tab.Screen
         name="Ínicio"
         component={HomeStack}
         options={{
@@ -120,6 +120,18 @@ const TabNavigator = ({ route, navigation }) => {
           title: 'Menu',
         }}
       />
+  <Tab.Screen
+  name="Notícias"
+  component={NewsScreen}
+  options={{
+    tabBarVisible: false, // Oculta a opção "Notícias" na barra de navegação inferior
+    headerShown: route.state && route.state.index > 0 ? false : true,
+    headerStyle: { backgroundColor: '#253494' },
+    headerTintColor: 'white',
+    tabBarLabel: '', // Remove o título da guia
+    tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+  }}
+/>
     </Tab.Navigator>
   );
 };
@@ -130,7 +142,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={TabNavigator} />
-        <Stack.Screen name="Cadastro" component={Cadastro} />
+        <Stack.Screen name="Cadastro" component={Cadastro} screenOptions={{ headerShown: true }} />
         <Stack.Screen
           name="NewsScreen"
           component={NewsScreen}

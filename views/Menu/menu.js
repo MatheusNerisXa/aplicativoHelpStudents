@@ -56,14 +56,14 @@ const Menu = () => {
       </View>
 
       <View style={styles.row}>
-  <TouchableOpacity
-    style={[styles.menuItem, styles.fullWidth, { backgroundColor: menuItems[3].color }]}
-    onPress={() => navigation.navigate('NewsScreen')}
-  >
-    <MaterialCommunityIcons name={menuItems[3].icon} size={24} color="#fff" />
-    <Text style={styles.menuText}>{menuItems[3].text}</Text>
-  </TouchableOpacity>
-</View>
+        <TouchableOpacity
+          style={[styles.menuItem, styles.fullWidth, { backgroundColor: menuItems[4].color }]}
+          onPress={() => (menuItems[4].text !== 'Sair' ? navigation.navigate(menuItems[4].text) : handleLogout())}
+        >
+          <MaterialCommunityIcons name={menuItems[4].icon} size={24} color="#fff" />
+          <Text style={styles.menuText}>{menuItems[4].text}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
