@@ -44,7 +44,7 @@ const EntranceExamScreen = ({ navigation }) => {
         <View style={entranceStyles.searchBar}>
           <TextInput
             style={entranceStyles.input}
-            placeholder="Pesquisar por nome"
+            placeholder="Pesquisar por vestibular"
             value={filter}
             onChangeText={text => setFilter(text)}
             placeholderTextColor="#FFF"

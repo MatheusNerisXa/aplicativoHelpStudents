@@ -4,6 +4,8 @@ import { View, Text, TextInput, ScrollView, RefreshControl, ActivityIndicator } 
 import NewsCard from './newsCard'; // Caminho corrigido
 import { newsStyles } from "../News/css/newsStyles";
 import config from '../../config/config.json';
+import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const NewsScreen = () => {
   const [news, setNews] = useState([]);
@@ -46,38 +48,38 @@ const NewsScreen = () => {
     item.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  if (loading) {
-    return (
-      <View style={news.container}>
-        <ActivityIndicator size="large" color="#253494" />
-        <Text style={newsStyles.loadingText}>Carregando...</Text>
-      </View>
-    );
-  }
-
-  if (!Array.isArray(news)) {
-    return (
-      <View style={newsStyles.container}>
-        <Text>Erro ao carregar notícias</Text>
-      </View>
-    );
-  }
+  const handleFilter = () => {
+    let filtered = news.filter(item => {
+      const searchValue = searchText.toLowerCase();
+      return item.title.toLowerCase().includes(searchValue);
+    });
+    setNews(filtered);
+  };
 
   return (
     <ScrollView
-      style={news.container}
+      style={newsStyles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
       showsVerticalScrollIndicator={false}
     >
       <View style={newsStyles.contentContainer}>
-        <TextInput
-          style={newsStyles.searchInput}
-          placeholder="Buscar por título"
-          value={searchText}
-          onChangeText={text => setSearchText(text)}
-        />
+        <View style={newsStyles.searchBar}>
+          <TextInput
+            style={newsStyles.input}
+            placeholder="Pesquisar por título"
+            placeholderTextColor="#FFF"
+            value={searchText}
+            onChangeText={text => setSearchText(text)}
+          />
+          <TouchableOpacity
+            style={newsStyles.searchIcon}
+            onPress={handleFilter}
+          >
+            <Ionicons name="search" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
         {filteredNews.length > 0 ? (
           filteredNews.map((item, index) => (
             <NewsCard key={index} news={item} />

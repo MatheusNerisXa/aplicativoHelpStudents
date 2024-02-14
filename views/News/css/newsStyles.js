@@ -5,17 +5,30 @@ export const newsStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
+    padding: 20,
   },
   contentContainer: {
-    padding: 16,
+    marginBottom: 20,
   },
-  searchInput: {
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    backgroundColor: '#253494',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  input: {
+    flex: 1,
     height: 40,
-    borderColor: '#253494',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 10,  // Alterado para paddingHorizontal
-    borderRadius: 8,
-    fontSize: 16,
+    paddingHorizontal: 10,
+    fontFamily: 'Arial',
+    fontSize: 14,
+    color: '#fff',
+  },
+  searchIcon: {
+    padding: 10,
   },
 });
+
+export default newsStyles;
