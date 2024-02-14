@@ -201,7 +201,7 @@ export default function App() {
             headerShown: true,
             headerStyle: { backgroundColor: '#253494' },
             headerTintColor: 'white',
-            title: 'Detalhes da Notícia',
+            title: 'Vestibulares',
             headerLeft: ({ onPress }) => (
               <TouchableOpacity
                 style={{ marginLeft: 16 }}
@@ -219,7 +219,7 @@ export default function App() {
             headerShown: true,
             headerStyle: { backgroundColor: '#253494' },
             headerTintColor: 'white',
-            title: 'Detalhes da Notícia',
+            title: 'Detalhes do vestibular',
             headerLeft: ({ onPress }) => (
               <TouchableOpacity
                 style={{ marginLeft: 16 }}
