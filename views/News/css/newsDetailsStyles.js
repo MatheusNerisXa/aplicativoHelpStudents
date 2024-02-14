@@ -35,7 +35,7 @@ export const newsDetailsStyles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   container:{
-    backgroundColor: "#F5F5F5"
+    backgroundColor: "#f0f0f0"
   },
   content: {
     fontSize: 18,
