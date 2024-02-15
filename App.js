@@ -127,7 +127,51 @@ const TabNavigator = ({ route, navigation }) => {
           title: 'Menu',
         }}
       />
-    
+       <Tab.Screen
+  name="Notícias"
+  component={NewsScreen}
+  options={({ navigation }) => ({
+    headerShown: true,
+    headerStyle: { backgroundColor: '#253494' },
+    headerTintColor: 'white',
+    title: 'Notícias',
+    gestureEnabled: true, // Habilita o gesto de deslizar
+    gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+    headerLeft: () => (
+      <TouchableOpacity
+        style={{ marginLeft: 16 }}
+        onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+      >
+        <MaterialIcons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+    ),
+    tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+  })}
+/>
+
+<Tab.Screen
+  name="Detalhes da Notícia"
+  component={NewsDetails}
+  options={({ navigation }) => ({
+    headerShown: true,
+    headerStyle: { backgroundColor: '#253494' },
+    headerTintColor: 'white',
+    title: 'Detalhes da Notícia',
+    gestureEnabled: true, // Habilita o gesto de deslizar
+    gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+    headerLeft: () => (
+      <TouchableOpacity
+        style={{ marginLeft: 16 }}
+        onPress={() => navigation.navigate('Notícias')} // Navegação de volta para o menu
+      >
+        <MaterialIcons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+    ),
+    tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+  })}
+/>
+
+
     </Tab.Navigator>
   );
 };
@@ -135,7 +179,7 @@ const TabNavigator = ({ route, navigation }) => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={TabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} screenOptions={{ headerShown: true }} />
@@ -158,7 +202,7 @@ export default function App() {
           })}
         />
           <Stack.Screen
-          name="NewsScreen"
+          name="Notícias"
           component={NewsScreen}
           options={({ navigation }) => ({
             headerShown: true,
@@ -177,7 +221,7 @@ export default function App() {
         />
        
         <Stack.Screen
-          name="NewsDetails"
+          name="Detalhes da Notícia"
           component={NewsDetails}
           options={{
             headerShown: true,

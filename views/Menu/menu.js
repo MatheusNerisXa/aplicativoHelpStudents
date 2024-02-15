@@ -13,7 +13,7 @@ const Menu = () => {
     } else if (menuItem === 'Vídeos') {
       navigation.navigate('VideoScreen');
     } else if (menuItem === 'Notícias') {
-      navigation.navigate('NewsScreen');
+      navigation.navigate('Notícias');
     } else if (menuItem === 'Vestibulares') {
       navigation.navigate('EntranceExamScreen');
     } 

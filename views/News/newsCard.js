@@ -8,7 +8,7 @@ const NewsCard = ({ news }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('NewsDetails', { news });
+    navigation.navigate('Detalhes da Notícia', { news });
   };
 
   return (
