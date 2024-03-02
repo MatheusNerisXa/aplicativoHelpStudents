@@ -7,12 +7,12 @@ import config from '../../config/config.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
-  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Novo estado para controle de carregamento
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     checkPreviousLogin();
@@ -22,6 +22,8 @@ export default function Login({ navigation }) {
     try {
       const userDataString = await AsyncStorage.getItem('userData');
       if (userDataString) {
+        const userData = JSON.parse(userDataString);
+        setEmail(userData.email); // Preencher automaticamente o campo de email
         navigation.replace('Home');
       } else {
         setIsLoading(false);
@@ -34,34 +36,43 @@ export default function Login({ navigation }) {
   
   const handleLogin = async () => {
     try {
-      setIsLoading(true); // Iniciar o carregamento
-
+      setIsLoading(true); 
+  
       let response = await fetch(config.urlRootNode + 'login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ emailUser: user, passwordUser: password }),
+        body: JSON.stringify({ emailUser: email, passwordUser: password }), 
       });
-
+  
       if (response.ok) {
-        const userData = { email: user };
-        await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        navigation.replace('Home');
-      } else {
+        const data = await response.json();
+        if (data.user) {
+            const { name } = data.user; // Obter o nome do usuário do servidor
+            await AsyncStorage.setItem('userData', JSON.stringify({ name: name, email: email }));
+            navigation.replace('Home');
+        } else {
+            setMessage('Dados do usuário não encontrados na resposta do servidor');
+            showErrorModal();
+        }
+    } else {
         const data = await response.json();
         setMessage(data.message || 'E-mail ou senha inválidos');
         showErrorModal();
-      }
+    }
+    
+      
     } catch (error) {
       console.error('Error during login:', error);
       setMessage('An error occurred during login');
       showErrorModal();
     } finally {
-      setIsLoading(false); // Marcar o carregamento como concluído, independentemente do resultado
+      setIsLoading(false); 
     }
   };
-
+  
+  
   const showErrorModal = () => {
     setIsErrorModalVisible(true);
   };
@@ -91,7 +102,6 @@ export default function Login({ navigation }) {
         <Image source={require('../../assets/img/logo.png')} style={{ width: 210, height: 180 }} />
       </View>
 
-
       <View style={loginStyles.inputContainer}>
         <Text style={loginStyles.label}>Email:</Text>
         <TextInput
@@ -100,7 +110,8 @@ export default function Login({ navigation }) {
           placeholderTextColor="#FFF"
           keyboardType="email-address"
           autoCapitalize="none"
-          onChangeText={(text) => setUser(text)}
+          value={email}
+          onChangeText={(text) => setEmail(text)} 
         />
       </View>
 
@@ -137,7 +148,6 @@ export default function Login({ navigation }) {
         <Text style={loginStyles.login__buttonText}>ENTRAR</Text>
       </TouchableOpacity>
 
-      {/* Modal de erro */}
       <Modal
         isVisible={isErrorModalVisible}
         onBackdropPress={hideErrorModal}

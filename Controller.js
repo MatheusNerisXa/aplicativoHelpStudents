@@ -59,7 +59,7 @@ app.post('/createUser', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     try {
-        const { emailUser, passwordUser } = req.body;
+        const { emailUser, passwordUser, nameUser } = req.body;
 
         const user = await model.User.findOne({
             where: {
@@ -72,10 +72,11 @@ app.post('/login', async (req, res) => {
             const match = await bcrypt.compare(passwordUser, user.password);
 
             if (match) {
-                res.send(JSON.stringify('Login bem-sucedido!'));
+                res.send(JSON.stringify({ message: 'Login bem-sucedido!', user: { name: user.name } }));
             } else {
                 res.status(401).send(JSON.stringify('Credenciais inválidas.'));
             }
+            
         } else {
             res.status(401).send(JSON.stringify('Credenciais inválidas.'));
         }

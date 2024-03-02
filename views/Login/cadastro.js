@@ -1,11 +1,12 @@
-// Cadastro.js
 import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { css } from "../Login/css/cadastroStyles";
 import config from "../../config/config.json";
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importe AsyncStorage
 
 export default function Cadastro({ navigation }) {
+  const [name, setName] = useState('');
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,7 +20,7 @@ export default function Cadastro({ navigation }) {
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
   const isRegisterButtonDisabled = () => {
-    return !(user.trim() && email.trim() && password.trim() && confirmPassword.trim());
+    return !(name.trim() && email.trim() && password.trim() && confirmPassword.trim());
   };
 
   const isValidEmail = (email) => {
@@ -28,7 +29,7 @@ export default function Cadastro({ navigation }) {
   };
 
   const validateInputs = () => {
-    setUserError(!user.trim());
+    setUserError(!name.trim());
     setEmailError(!isValidEmail(email));
     setPasswordError(password.length < 6);
     setConfirmPasswordError(password !== confirmPassword);
@@ -50,7 +51,7 @@ export default function Cadastro({ navigation }) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          nameUser: user,
+          nameUser: name, // Mantido como 'nameUser', mas com o valor da variável 'name'
           passwordUser: password,
           emailUser: email
         })
@@ -59,8 +60,9 @@ export default function Cadastro({ navigation }) {
       let data = await response.json();
       setMessage(data.message);
   
-      // If the registration is successful, navigate to the 'Home' screen
+      // If the registration is successful, save the name in AsyncStorage and navigate to the 'Home' screen
       if (!data.error) {
+        await AsyncStorage.setItem('userData', JSON.stringify({ name: name, email: email }));
         navigation.navigate('Home');
       }
     } catch (error) {
@@ -83,7 +85,7 @@ export default function Cadastro({ navigation }) {
           style={[css.input, userError && css.errorBorder]}
           placeholder="Digite seu nome"
           placeholderTextColor="#2c3e50"
-          onChangeText={(text) => setUser(text)}
+          onChangeText={(text) => setName(text)}
         />
         {userError && <Text style={css.errorMessage}>Por favor, preencha o campo de nome.</Text>}
       </View>
