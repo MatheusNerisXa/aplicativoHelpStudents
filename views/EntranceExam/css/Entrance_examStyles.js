@@ -21,7 +21,7 @@ export const entranceStyles = StyleSheet.create({
         flex: 1,
         height: 40,
         paddingHorizontal: 10,
-        fontFamily: 'Arial',
+        fontFamily: 'sans-serif',
         fontSize: 14,
         color: '#fff',
       },

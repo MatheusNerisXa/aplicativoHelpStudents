@@ -21,7 +21,7 @@ export const videosStyles = StyleSheet.create({
         flex: 1,
         height: 40,
         paddingHorizontal: 10,
-        fontFamily: 'Arial',
+        fontFamily: 'sans-serif',
         fontSize: 14,
         color: '#fff',
       },
@@ -45,7 +45,7 @@ export const videosStyles = StyleSheet.create({
       },
       filterOptionText: {
         color: '#fff',
-        fontFamily: 'Arial',
+        fontFamily: 'sans-serif',
         fontSize: 14,
       },
       itemContainer: {
@@ -74,7 +74,7 @@ export const videosStyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#333',
-        fontFamily: 'Arial',
+        fontFamily: 'sans-serif',
       },
       bottomContainer: {
         flexDirection: 'row',
@@ -88,7 +88,7 @@ export const videosStyles = StyleSheet.create({
       matter: {
         fontSize: 14,
         color: '#666',
-        fontFamily: 'Arial',
+        fontFamily: 'sans-serif',
         marginLeft: 5,
       },
       categoryIcon: {

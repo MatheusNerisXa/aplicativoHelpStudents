@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     paddingHorizontal: 10,
-    fontFamily: 'Arial',
+    fontFamily: 'sans-serif',
     fontSize: 14,
     color: '#fff',
   },
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   filterOptionText: {
     color: '#fff',
-    fontFamily: 'Arial',
+    fontFamily: 'sans-serif',
     fontSize: 14,
   },
   itemContainer: {
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    fontFamily: 'Arial',
+    fontFamily: 'sans-serif',
   },
   bottomContainer: {
     flexDirection: 'row',
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   matter: {
     fontSize: 14,
     color: '#666',
-    fontFamily: 'Arial',
+    fontFamily: 'sans-serif',
     marginLeft: 5,
   },
   categoryIcon: {
