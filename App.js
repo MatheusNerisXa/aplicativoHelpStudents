@@ -128,9 +128,9 @@ const TabNavigator = ({ route, navigation }) => {
         }}
       />
        <Tab.Screen
-  name="Notícias"
-  component={NewsScreen}
-  options={({ navigation }) => ({
+    name="Notícias"
+    component={NewsScreen}
+    options={({ navigation }) => ({
     headerShown: true,
     headerStyle: { backgroundColor: '#253494' },
     headerTintColor: 'white',
@@ -171,6 +171,27 @@ const TabNavigator = ({ route, navigation }) => {
   })}
 />
 
+  <Tab.Screen
+      name="VideoScreen"
+      component={VideoScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Vídeos',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
 
     </Tab.Navigator>
   );
@@ -183,24 +204,30 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={TabNavigator} />
         <Stack.Screen name="Cadastro" component={Cadastro} screenOptions={{ headerShown: true }} />
-        <Stack.Screen
-          name="VideoScreen"
-          component={VideoScreen}
-          options={({ navigation }) => ({
-            headerShown: true,
-            headerStyle: { backgroundColor: '#253494' },
-            headerTintColor: 'white',
-            title: 'Vídeos',
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ marginLeft: 16 }}
-                onPress={() => navigation.goBack()}
-              >
-                <MaterialIcons name="arrow-back" size={24} color="white" />
-              </TouchableOpacity>
-            ),
-          })}
-        />
+        
+        <Tab.Screen
+    name="VideoScreen"
+    component={VideoScreen}
+    options={({ navigation }) => ({
+    headerShown: true,
+    headerStyle: { backgroundColor: '#253494' },
+    headerTintColor: 'white',
+    title: 'Vídeos',
+    gestureEnabled: true, // Habilita o gesto de deslizar
+    gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+    headerLeft: () => (
+      <TouchableOpacity
+        style={{ marginLeft: 16 }}
+        onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+      >
+        <MaterialIcons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+    ),
+    tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+  })}
+/>
+
+      
           <Stack.Screen
           name="Notícias"
           component={NewsScreen}
