@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const model = require('./models');
 const { News } = require('./models');
 const { Video } = require('./models');
+const {Subject} = require('./models');
 
 let app = express();
 app.use(cors());
@@ -119,6 +120,18 @@ app.get('/entranceExams', async (req, res) => {
     } catch (error) {
         console.error('Erro ao obter vestibulares:', error);
         res.status(500).json({ error: 'Erro ao obter vestibulares.' });
+    }
+});
+
+app.get('/subjects', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /subjects');
+        const subjects = await Subject.findAll(); // Usar o método findAll() do modelo Subject
+        console.log('Matérias obtidas com sucesso:', subjects);
+        res.json(subjects);
+    } catch (error) {
+        console.error('Erro ao obter matérias:', error);
+        res.status(500).json({ error: 'Erro ao obter matérias.' });
     }
 });
 

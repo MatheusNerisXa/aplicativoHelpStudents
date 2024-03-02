@@ -13,6 +13,8 @@ import ChatScreen from './views/helpgpt/chat';
 import VideoScreen from './views/videos/videos';
 import EntranceExamScreen from './views/EntranceExam/Entrance_exam';
 import EntranceExamDetailScreen from './views/EntranceExam/EntranceExamDetailScreen';
+import SubjectsScreen from './views/Subjects/subject';
+import SubjectDetailsScreen from './views/Subjects/SubjectDetailsScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -112,10 +114,15 @@ const TabNavigator = ({ route, navigation }) => {
           title: 'HelpGpt',
         }}
       />
-      <Tab.Screen
+       <Tab.Screen
         name="Materias"
-        component={Home}
-        options={{ headerShown: false }}
+        component={SubjectsScreen}
+        options={{
+          headerShown: route.state && route.state.index > 0 ? false : true,
+          headerStyle: { backgroundColor: '#253494' },
+          headerTintColor: 'white',
+          title: 'Matérias',
+        }}
       />
       <Tab.Screen
         name="Menu"
@@ -193,6 +200,51 @@ const TabNavigator = ({ route, navigation }) => {
     })}
   />
 
+<Tab.Screen
+      name="SubjectsScreen"
+      component={SubjectsScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Matérias',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+<Tab.Screen
+      name="SubjectDetailsScreen"
+      component={SubjectDetailsScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Detalhes da matéria',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('SubjectsScreen')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+
     </Tab.Navigator>
   );
 };
@@ -227,7 +279,46 @@ export default function App() {
   })}
 />
 
-      
+<Stack.Screen
+          name="SubjectsScreen"
+          component={SubjectsScreen}
+          options={({ navigation }) => ({
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Matérias',
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={() => navigation.goBack()}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+
+
+<Stack.Screen
+          name="SubjectDetailsScreen"
+          component={SubjectDetailsScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Detalhes da matéria',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
+    
           <Stack.Screen
           name="Notícias"
           component={NewsScreen}

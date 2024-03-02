@@ -51,7 +51,7 @@ container: {
     color: '#333',
   },
   sendButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#253494',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,

@@ -16,7 +16,9 @@ const Menu = () => {
       navigation.navigate('Notícias');
     } else if (menuItem === 'Vestibulares') {
       navigation.navigate('EntranceExamScreen');
-    } 
+    } else if (menuItem === 'Matérias') {
+      navigation.navigate('SubjectsScreen');
+    }
     else {
       navigation.navigate(menuItem);
     }
