@@ -78,6 +78,31 @@ const CreateSubjectScreen = () => {
   };
 
   const handleSubmit = async () => {
+    const errors = [];
+  
+    // Verifica se todos os campos estão preenchidos e adiciona mensagens de erro específicas para cada campo não preenchido
+    if (!name) {
+      errors.push('O campo "Nome da Matéria" é obrigatório.');
+    }
+  
+    if (!professor) {
+      errors.push('O campo "Professor" é obrigatório.');
+    }
+  
+    if (selectedDays.length === 0) {
+      errors.push('Selecione pelo menos um dia da semana.');
+    }
+  
+    if (!location) {
+      errors.push('O campo "Local" é obrigatório.');
+    }
+  
+    if (errors.length > 0) {
+      // Se houver erros, exibe uma mensagem de alerta contendo todas as mensagens de erro
+      alert(errors.join('\n'));
+      return;
+    }
+  
     try {
       // Ajustar o formato do startTime e endTime
       const formattedStartTime = startTime.toISOString().replace('T', ' ').replace('Z', '');
@@ -113,8 +138,7 @@ const CreateSubjectScreen = () => {
       console.error('Erro ao criar matéria:', error);
     }
   };
-
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.daysContainer}>
@@ -209,7 +233,14 @@ const CreateSubjectScreen = () => {
           locale="pt-BR" // Definindo o idioma para português do Brasil
         />
       )}
-      <Button title="Criar Matéria" onPress={handleSubmit} />
+
+        <TouchableOpacity 
+        style={[styles.button, { backgroundColor: '#253494' }]} 
+        onPress={handleSubmit}
+        >
+        <Text style={styles.buttonText}>Criar Matéria</Text>
+        </TouchableOpacity>
+
     </View>
   );
 };
@@ -255,6 +286,18 @@ const styles = StyleSheet.create({
   },
   selectedDayButtonText: {
     color: 'white',
+  },
+  button: {
+    backgroundColor: '#253494',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
