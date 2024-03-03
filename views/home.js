@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native'; // Importe o hook useFocusEffect
+import { useFocusEffect } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons'; // Importe Ionicons do @expo/vector-icons
 
 export default function Home() {
     const [userData, setUserData] = useState({ name: '', email: '' });
@@ -20,9 +21,8 @@ export default function Home() {
 
     useEffect(() => {
         getUserData();
-    }, []); // Chama getUserData apenas uma vez durante a montagem inicial da tela
+    }, []);
 
-    // Atualiza as informações do usuário sempre que a tela Home receber foco
     useFocusEffect(() => {
         getUserData();
     });
@@ -30,7 +30,11 @@ export default function Home() {
     return (
         <View style={styles.container}>
             <View style={styles.card}>
-                <Text style={styles.title}>Bem-vindo, {userData.name}</Text>
+                <Ionicons name="book" size={24} color="#FFF" style={styles.icon} />
+                <View style={styles.content}>
+                    <Text style={styles.title}>Bem-vindo, {userData.name} </Text>
+                    <Text style={styles.subtitle}> {userData.email}</Text>
+                </View>
             </View>
         </View>
     );
@@ -39,17 +43,17 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff', // Fundo branco
-        paddingTop: 50, // Espaçamento no topo para posicionar o card
-        paddingHorizontal: 20, // Espaçamento horizontal
-        alignItems: 'center', // Centralizar horizontalmente
+        backgroundColor: '#fff',
+        paddingTop: 30,
+        paddingHorizontal: 20,
+        alignItems: 'center',
     },
     card: {
-        backgroundColor: '#f5f5f5', // Fundo do card
-        borderRadius: 10, // Cantos arredondados
-        padding: 20, // Espaçamento interno
-        width: '100%', // Largura total
-        shadowColor: '#000', // Cor da sombra
+        backgroundColor: '#253494',
+        borderRadius: 10,
+        padding: 20,
+        width: '100%',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -57,17 +61,25 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        flexDirection: 'row', // Adiciona um layout de linha
+        alignItems: 'center', // Centraliza verticalmente
+    },
+    content: {
+        flex: 1, // Ocupa todo o espaço disponível
     },
     title: {
-        fontSize: 20, // Tamanho do título
-        fontWeight: 'bold', // Negrito
-        marginBottom: 10, // Espaçamento inferior
-        color: '#253494', // Cor do texto
-        textAlign: 'center', // Centralizado
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#FFF',
+        textAlign: 'left',
     },
     subtitle: {
-        fontSize: 18, // Tamanho do subtítulo
-        color: '#253494', // Cor do texto
-        textAlign: 'center', // Centralizado
+        fontSize: 16,
+        color: '#FFF',
+        textAlign: 'left',
+    },
+    icon: {
+        marginRight: 20, // Espaçamento à direita do ícone
     },
 });
