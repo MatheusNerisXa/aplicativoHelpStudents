@@ -127,7 +127,19 @@ app.get('/entranceExams', async (req, res) => {
 app.get('/subjects', async (req, res) => {
     try {
         console.log('Recebida requisição para /subjects');
-        const subjects = await Subject.findAll(); // Usar o método findAll() do modelo Subject
+        const userId = req.query.userId; // Obtenha o userId do parâmetro de consulta
+
+        // Verifique se o userId foi fornecido
+        if (!userId) {
+            return res.status(400).json({ error: 'O parâmetro de consulta "userId" é obrigatório.' });
+        }
+
+        const subjects = await Subject.findAll({
+            where: {
+                userId: userId, // Filtrar matérias por userId
+            }
+        });
+
         console.log('Matérias obtidas com sucesso:', subjects);
         res.json(subjects);
     } catch (error) {
@@ -135,6 +147,7 @@ app.get('/subjects', async (req, res) => {
         res.status(500).json({ error: 'Erro ao obter matérias.' });
     }
 });
+
 
 // Rota para criar uma nova matéria (subject)
 app.post('/createSubject', async (req, res) => {

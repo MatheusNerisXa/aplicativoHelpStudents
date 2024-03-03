@@ -42,40 +42,40 @@ const CreateSubjectScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(config.urlRootNode + 'createSubject', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name,
-          professor,
-          startTime,
-          endTime,
-          days,
-          location,
-          startDate,
-          endDate,
-          status,
-          userId // Use o ID do usuário logado
-        })
-      });
-      const data = await response.json();
-      console.log(data);
-      // Limpar os campos após o envio bem-sucedido
-      setName('');
-      setProfessor('');
-      setStartTime('');
-      setEndTime('');
-      setDays('');
-      setLocation('');
-      setStartDate('');
-      setEndDate('');
-      setStatus('');
+        const response = await fetch(config.urlRootNode + 'createSubject', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name,
+                professor,
+                startTime,
+                endTime,
+                days,
+                location,
+                startDate,
+                endDate,
+                status,
+                userId // Use o ID do usuário logado
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+        // Limpar os campos após o envio bem-sucedido
+        setName('');
+        setProfessor('');
+        setStartTime('');
+        setEndTime('');
+        setDays('');
+        setLocation('');
+        setStartDate('');
+        setEndDate('');
+        setStatus('');
     } catch (error) {
-      console.error('Erro ao criar matéria:', error);
+        console.error('Erro ao criar matéria:', error);
     }
-  };
+};
 
   return (
     <View style={styles.container}>

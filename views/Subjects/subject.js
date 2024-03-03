@@ -3,24 +3,46 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import { useNavigation } from '@react-navigation/native'; // Importe isso se estiver usando o React Navigation
 import { AntDesign } from '@expo/vector-icons'; // Importe o ícone do AntDesign
 import config from '../../config/config.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SubjectsScreen = () => {
   const [subjects, setSubjects] = useState([]);
+  const [userId, setUserId] = useState(null);
   const navigation = useNavigation(); // Use isso se estiver usando o React Navigation
 
   useEffect(() => {
-    async function fetchSubjects() {
+    async function fetchUserData() {
       try {
-        const response = await fetch(config.urlRootNode + 'subjects');
-        const data = await response.json();
-        setSubjects(data);
+        const userDataString = await AsyncStorage.getItem('userData');
+        if (userDataString) {
+          const userData = JSON.parse(userDataString);
+          const { email } = userData; // Extrai o email do usuário
+
+          // Faz uma solicitação para obter o ID do usuário
+          const response = await fetch(config.urlRootNode + `getUserId?email=${email}`);
+          const data = await response.json();
+          console.log('ID do usuário:', data.userId); // Imprime o ID do usuário no console
+          setUserId(data.userId); // Define o ID do usuário no estado
+          
+          fetchSubjects(data.userId); // Chama a função para buscar as matérias do usuário
+        }
       } catch (error) {
-        console.error('Erro ao buscar matérias:', error);
+        console.error('Erro ao buscar dados do usuário:', error);
       }
     }
 
-    fetchSubjects();
+    fetchUserData();
   }, []);
+
+  const fetchSubjects = async (userId) => {
+    try {
+      const response = await fetch(`${config.urlRootNode}subjects?userId=${userId}`);
+      const data = await response.json();
+      setSubjects(data);
+    } catch (error) {
+      console.error('Erro ao buscar matérias:', error);
+    }
+  };
 
   const handleSubjectPress = (subject) => {
     // Navegue para a tela SubjectDetails e passe os dados da matéria como parâmetro
