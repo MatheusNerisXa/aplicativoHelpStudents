@@ -8,6 +8,7 @@ const { News } = require('./models');
 const { Video } = require('./models');
 const {Subject} = require('./models');
 
+
 let app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -134,6 +135,68 @@ app.get('/subjects', async (req, res) => {
         res.status(500).json({ error: 'Erro ao obter matérias.' });
     }
 });
+
+// Rota para criar uma nova matéria (subject)
+app.post('/createSubject', async (req, res) => {
+    try {
+        // Criação da nova matéria com base nos dados recebidos
+        const newSubject = await Subject.create({
+            name: req.body.name,
+            professor: req.body.professor,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            days: JSON.stringify(req.body.days), // Convertendo array de dias para JSON
+            location: req.body.location,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
+            status: req.body.status,
+            userId: req.body.userId
+        });
+
+        // Verificação se a matéria foi criada com sucesso
+        if (newSubject) {
+            res.status(201).json({ message: 'Matéria criada com sucesso!' });
+        } else {
+            res.status(500).json({ error: 'Erro ao criar a matéria.' });
+        }
+    } catch (error) {
+        console.error('Erro durante a criação da matéria:', error);
+        res.status(500).json({ error: 'Erro durante a criação da matéria.' });
+    }
+});
+
+app.get('/getUserId', async (req, res) => {
+    try {
+        // Obtenha o email do parâmetro de consulta
+        const userEmail = req.query.email;
+
+        // Verifique se o email foi fornecido
+        if (!userEmail) {
+            return res.status(400).json({ error: 'O parâmetro de consulta "email" é obrigatório.' });
+        }
+
+        // Busque o usuário com base no email
+        const user = await model.User.findOne({
+            where: {
+                email: userEmail,
+            }
+        });
+
+        // Verifique se o usuário foi encontrado
+        if (user) {
+            // Retorne o ID do usuário encontrado
+            return res.json({ userId: user.id });
+        } else {
+            // Se o usuário não for encontrado, retorne um erro
+            return res.status(404).json({ error: 'Usuário não encontrado para o email fornecido.' });
+        }
+    } catch (error) {
+        console.error('Erro ao obter o ID do usuário:', error);
+        return res.status(500).json({ error: 'Erro ao obter o ID do usuário.' });
+    }
+});
+
+
 
 // Start Server
 let port = process.env.PORT || 3000;

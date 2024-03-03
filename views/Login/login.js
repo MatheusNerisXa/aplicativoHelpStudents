@@ -49,8 +49,8 @@ export default function Login({ navigation }) {
       if (response.ok) {
         const data = await response.json();
         if (data.user) {
-            const { name } = data.user; // Obter o nome do usuário do servidor
-            await AsyncStorage.setItem('userData', JSON.stringify({ name: name, email: email }));
+            const { id, name } = data.user; // Obter o ID do usuário do servidor
+            await AsyncStorage.setItem('userData', JSON.stringify({ id: id, name: name, email: email }));
             navigation.replace('Home');
         } else {
             setMessage('Dados do usuário não encontrados na resposta do servidor');

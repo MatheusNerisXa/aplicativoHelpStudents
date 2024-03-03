@@ -15,6 +15,7 @@ import EntranceExamScreen from './views/EntranceExam/Entrance_exam';
 import EntranceExamDetailScreen from './views/EntranceExam/EntranceExamDetailScreen';
 import SubjectsScreen from './views/Subjects/subject';
 import SubjectDetailsScreen from './views/Subjects/SubjectDetailsScreen';
+import CreateSubjectScreen from './views/Subjects/createSubject';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -222,6 +223,31 @@ const TabNavigator = ({ route, navigation }) => {
     })}
   />
 
+
+<Tab.Screen
+      name="CreateSubjectScreen"
+      component={CreateSubjectScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Cadastrar matéria',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('SubjectsScreen')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+
+
 <Tab.Screen
       name="SubjectDetailsScreen"
       component={SubjectDetailsScreen}
@@ -318,7 +344,25 @@ export default function App() {
           }}
         />
 
-    
+<Stack.Screen
+          name="CreateSubjectScreen"
+          component={CreateSubjectScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Cadastrar matéria',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
           <Stack.Screen
           name="Notícias"
           component={NewsScreen}

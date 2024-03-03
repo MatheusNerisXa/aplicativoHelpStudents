@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // Importe isso se estiver usando o React Navigation
+import { AntDesign } from '@expo/vector-icons'; // Importe o ícone do AntDesign
 import config from '../../config/config.json';
 
 const SubjectsScreen = () => {
@@ -66,6 +67,9 @@ const SubjectsScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderSubjectCard}
       />
+      <TouchableOpacity onPress={() => navigation.navigate('CreateSubjectScreen')} style={styles.addButton}>
+        <AntDesign name="plus" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -109,7 +113,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
   },
-  // Adicione mais estilos conforme necessário
+  addButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'blue',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 2,
+  },
 });
 
 export default SubjectsScreen;
