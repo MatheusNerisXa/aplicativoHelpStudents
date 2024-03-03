@@ -37,6 +37,7 @@ const SubjectsScreen = () => {
     try {
       const response = await fetch(`${config.urlRootNode}subjects?userId=${userId}`);
       const data = await response.json();
+      console.log('Matérias recebidas:', data); // Verifica se os dados das matérias estão corretos
       setSubjects(data);
     } catch (error) {
       console.error('Erro ao buscar matérias:', error);
@@ -55,19 +56,36 @@ const SubjectsScreen = () => {
     const bgColor = getRandomColor();
     const cardStyle = { ...styles.card, backgroundColor: bgColor };
     const textColor = getTextColor(bgColor);
-
+  
+    console.log('Dias:', item.days); // Verifica se item.days está sendo recebido corretamente
+  
+    let daysString = '';
+  
+    if (Array.isArray(item.days)) {
+      if (item.days.length === 1) {
+        // Se houver apenas um dia, exibe-o normalmente
+        daysString = item.days[0];
+      } else {
+        // Se houver mais de um dia, exibe-os em uma lista separada por vírgulas
+        daysString = item.days.join(', ');
+      }
+    } else {
+      // Se não for um array, exibe o valor normalmente
+      daysString = item.days;
+    }
+  
     return (
       <TouchableOpacity onPress={() => handleSubjectPress(item)} style={cardStyle}>
         <Text style={[styles.subjectName, { color: textColor }]}>{item.name}</Text>
         <Text style={[styles.subjectProfessor, { color: textColor }]}>Professor: {item.professor}</Text>
         <Text style={[styles.subjectTime, { color: textColor }]}>Horário: {item.startTime} - {item.endTime}</Text>
-        <Text style={[styles.subjectDays, { color: textColor }]}>Dias: {item.days}</Text>
+        <Text style={[styles.subjectDays, { color: textColor }]}>Dias: {daysString}</Text>
         <Text style={[styles.subjectLocation, { color: textColor }]}>Local: {item.location}</Text>
         <Text style={[styles.subjectStatus, { color: textColor }]}>Status: {item.status}</Text>
       </TouchableOpacity>
     );
-  };
-
+  };  
+  
   const getTextColor = (bgColor) => {
     const hex = bgColor.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16);
