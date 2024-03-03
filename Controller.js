@@ -152,13 +152,14 @@ app.get('/subjects', async (req, res) => {
 // Rota para criar uma nova matéria (subject)
 app.post('/createSubject', async (req, res) => {
     try {
-        // Criação da nova matéria com base nos dados recebidos
+        console.log('Recebida requisição para criar uma nova matéria:', req.body);
+
         const newSubject = await Subject.create({
             name: req.body.name,
             professor: req.body.professor,
             startTime: req.body.startTime,
             endTime: req.body.endTime,
-            days: JSON.stringify(req.body.days), // Convertendo array de dias para JSON
+            days: JSON.stringify(req.body.days),
             location: req.body.location,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
@@ -166,10 +167,12 @@ app.post('/createSubject', async (req, res) => {
             userId: req.body.userId
         });
 
-        // Verificação se a matéria foi criada com sucesso
+        console.log('Nova matéria criada com sucesso:', newSubject);
+
         if (newSubject) {
             res.status(201).json({ message: 'Matéria criada com sucesso!' });
         } else {
+            console.log('Erro: A nova matéria não foi criada.');
             res.status(500).json({ error: 'Erro ao criar a matéria.' });
         }
     } catch (error) {
@@ -177,6 +180,7 @@ app.post('/createSubject', async (req, res) => {
         res.status(500).json({ error: 'Erro durante a criação da matéria.' });
     }
 });
+
 
 app.get('/getUserId', async (req, res) => {
     try {
