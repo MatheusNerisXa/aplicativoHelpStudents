@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Importe isso se estiver usando o React Navigation
-import { AntDesign } from '@expo/vector-icons'; // Importe o ícone do AntDesign
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
 import config from '../../config/config.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SubjectsScreen = () => {
   const [subjects, setSubjects] = useState([]);
   const [userId, setUserId] = useState(null);
-  const navigation = useNavigation(); // Use isso se estiver usando o React Navigation
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -16,15 +16,14 @@ const SubjectsScreen = () => {
         const userDataString = await AsyncStorage.getItem('userData');
         if (userDataString) {
           const userData = JSON.parse(userDataString);
-          const { email } = userData; // Extrai o email do usuário
+          const { email } = userData;
 
-          // Faz uma solicitação para obter o ID do usuário
           const response = await fetch(config.urlRootNode + `getUserId?email=${email}`);
           const data = await response.json();
-          console.log('ID do usuário:', data.userId); // Imprime o ID do usuário no console
-          setUserId(data.userId); // Define o ID do usuário no estado
+          console.log('ID do usuário:', data.userId);
+          setUserId(data.userId);
           
-          fetchSubjects(data.userId); // Chama a função para buscar as matérias do usuário
+          fetchSubjects(data.userId);
         }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
@@ -45,12 +44,10 @@ const SubjectsScreen = () => {
   };
 
   const handleSubjectPress = (subject) => {
-    // Navegue para a tela SubjectDetails e passe os dados da matéria como parâmetro
     navigation.navigate('SubjectDetailsScreen', { subject });
   };
 
   const getRandomColor = () => {
-    // Gera uma cor hexadecimal aleatória
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   };
 
@@ -67,28 +64,28 @@ const SubjectsScreen = () => {
         <Text style={[styles.subjectDays, { color: textColor }]}>Dias: {item.days}</Text>
         <Text style={[styles.subjectLocation, { color: textColor }]}>Local: {item.location}</Text>
         <Text style={[styles.subjectStatus, { color: textColor }]}>Status: {item.status}</Text>
-        {/* Adicione os outros campos conforme necessário */}
       </TouchableOpacity>
     );
   };
 
   const getTextColor = (bgColor) => {
-    // Retorna a cor do texto com base na luminosidade do fundo
     const hex = bgColor.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-    return brightness > 125 ? '#000' : '#fff'; // Retorna preto para fundos claros e branco para fundos escuros
+    return brightness > 125 ? '#000' : '#fff';
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={subjects}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderSubjectCard}
-      />
+      <ScrollView>
+        {subjects.map((subject, index) => (
+          <View key={index}>
+            {renderSubjectCard({ item: subject })}
+          </View>
+        ))}
+      </ScrollView>
       <TouchableOpacity onPress={() => navigation.navigate('CreateSubjectScreen')} style={styles.addButton}>
         <AntDesign name="plus" size={24} color="white" />
       </TouchableOpacity>
