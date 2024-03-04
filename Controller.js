@@ -7,7 +7,7 @@ const model = require('./models');
 const { News } = require('./models');
 const { Video } = require('./models');
 const {Subject} = require('./models');
-
+const { Op } = require('sequelize');
 
 let app = express();
 app.use(cors());
@@ -213,6 +213,30 @@ app.get('/getUserId', async (req, res) => {
     }
 });
 
+
+app.get('/subjectsByDay', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        const day = req.query.day;
+
+        if (!userId || !day) {
+            return res.status(400).json({ error: 'Os parâmetros "userId" e "day" são obrigatórios.' });
+        }
+
+        const subjects = await Subject.findAll({
+            where: {
+                userId: userId,
+                days: { [Op.like]: `%${day}%` } // Use uma operação LIKE para encontrar as matérias que possuem o dia específico
+            }
+        });
+
+        console.log('Matérias do usuário para o dia', day, ':', subjects);
+        res.json(subjects);
+    } catch (error) {
+        console.error('Erro ao obter matérias do usuário para o dia específico:', error);
+        res.status(500).json({ error: 'Erro ao obter matérias do usuário para o dia específico.' });
+    }
+});
 
 
 

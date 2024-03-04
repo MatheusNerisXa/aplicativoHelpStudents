@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons'; // Importe Ionicons do @expo/vector-icons
+import config from '../config/config.json';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Home() {
-    const [userData, setUserData] = useState({ name: '', email: '' });
+export default function Home({ navigation }) {
+    const [userData, setUserData] = useState({ id: '', name: '', email: '' });
+    const [todaySubjects, setTodaySubjects] = useState([]);
 
     const getUserData = async () => {
         try {
@@ -13,29 +14,63 @@ export default function Home() {
             if (userDataString) {
                 const userData = JSON.parse(userDataString);
                 setUserData(userData);
+                getLoggedInUserId(userData.email);
             }
         } catch (error) {
             console.error('Erro ao buscar dados do usuário:', error);
         }
     };
 
+    const getLoggedInUserId = async (email) => {
+        try {
+            const response = await fetch(config.urlRootNode + `getUserId?email=${email}`);
+            const data = await response.json();
+            getTodaySubjects(data.userId);
+        } catch (error) {
+            console.error('Erro ao obter ID do usuário:', error);
+        }
+    };
+
+    const getTodaySubjects = async (userId) => {
+        try {
+            const response = await fetch(`${config.urlRootNode}subjectsByDay?userId=${userId}&day=${getToday()}`);
+            const responseData = await response.json();
+            setTodaySubjects(responseData);
+        } catch (error) {
+            console.error('Erro ao buscar as aulas do dia:', error);
+        }
+    };
+
+    const getToday = () => {
+        const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        const todayIndex = new Date().getDay();
+        return days[todayIndex];
+    };
+
     useEffect(() => {
         getUserData();
     }, []);
 
-    useFocusEffect(() => {
-        getUserData();
-    });
-
     return (
         <View style={styles.container}>
-            <View style={styles.card}>
-                <Ionicons name="book" size={24} color="#FFF" style={styles.icon} />
-                <View style={styles.content}>
-                    <Text style={styles.title}>Bem-vindo, {userData.name} </Text>
-                    <Text style={styles.subtitle}> {userData.email}</Text>
+            <View style={styles.userInfo}>
+                <Ionicons name="person-circle" size={80} color="#6C63FF" />
+                <View style={styles.userDetails}>
+                    <Text style={styles.userName}>{userData.name}</Text>
+                    <Text style={styles.userEmail}>{userData.email}</Text>
                 </View>
             </View>
+            <Text style={styles.sectionTitle}>Aulas do dia:</Text>
+            <FlatList
+                data={todaySubjects}
+                renderItem={({ item }) => (
+                    <View style={styles.subjectItem}>
+                        <Text style={styles.subjectName}>{item.name}</Text>
+                        <Text style={styles.subjectDetails}>{item.startTime} - {item.endTime}, {item.location}</Text>
+                    </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+            />
         </View>
     );
 }
@@ -43,43 +78,46 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 30,
-        paddingHorizontal: 20,
-        alignItems: 'center',
-    },
-    card: {
-        backgroundColor: '#253494',
-        borderRadius: 10,
         padding: 20,
-        width: '100%',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        flexDirection: 'row', // Adiciona um layout de linha
-        alignItems: 'center', // Centraliza verticalmente
+        backgroundColor: '#FFF',
     },
-    content: {
-        flex: 1, // Ocupa todo o espaço disponível
+    userInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
     },
-    title: {
+    userDetails: {
+        marginLeft: 20,
+    },
+    userName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    userEmail: {
+        fontSize: 18,
+        color: '#666',
+    },
+    sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 5,
-        color: '#FFF',
-        textAlign: 'left',
+        marginBottom: 10,
+        color: '#6C63FF',
     },
-    subtitle: {
+    subjectItem: {
+        padding: 15,
+        borderRadius: 10,
+        backgroundColor: '#F0F0F0',
+        marginBottom: 10,
+        elevation: 3,
+    },
+    subjectName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    subjectDetails: {
         fontSize: 16,
-        color: '#FFF',
-        textAlign: 'left',
-    },
-    icon: {
-        marginRight: 20, // Espaçamento à direita do ícone
+        color: '#666',
     },
 });
