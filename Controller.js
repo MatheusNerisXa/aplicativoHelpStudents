@@ -238,6 +238,18 @@ app.get('/subjectsByDay', async (req, res) => {
     }
 });
 
+// Recuperação de todos os Banners para exibição no aplicativo
+app.get('/banners', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /banners');
+        const banners = await model.Banner.findAll();
+        console.log('Banners obtidos com sucesso:', banners);
+        res.json(banners);
+    } catch (error) {
+        console.error('Erro ao obter banners:', error);
+        res.status(500).json({ error: 'Erro ao obter banners.' });
+    }
+});
 
 
 // Start Server

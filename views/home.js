@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../config/config.json';
-import { Ionicons } from '@expo/vector-icons';
+
+const windowWidth = Dimensions.get('window').width;
 
 export default function Home({ navigation }) {
     const [userData, setUserData] = useState({ id: '', name: '', email: '' });
     const [todaySubjects, setTodaySubjects] = useState([]);
+    const [banners, setBanners] = useState([]);
+    const [greeting, setGreeting] = useState('');
+
+    // Função para carregar os banners da API
+    const loadBanners = async () => {
+        try {
+            const response = await fetch(`${config.urlRootNode}banners`);
+            const responseData = await response.json();
+            setBanners(responseData);
+        } catch (error) {
+            console.error('Erro ao buscar banners:', error);
+        }
+    };
 
     const getUserData = async () => {
         try {
@@ -47,18 +61,48 @@ export default function Home({ navigation }) {
         return days[todayIndex];
     };
 
+    const getGreeting = () => {
+        const currentHour = new Date().getHours();
+        if (currentHour >= 5 && currentHour < 12) {
+            setGreeting('Bom dia');
+        } else if (currentHour >= 12 && currentHour < 18) {
+            setGreeting('Boa tarde');
+        } else {
+            setGreeting('Boa noite');
+        }
+    };
+
     useEffect(() => {
         getUserData();
+        loadBanners(); // Carregar os banners ao montar a tela
+        getGreeting(); // Obter a saudação com base no horário
     }, []);
+
+    const handleBannerPress = (item) => {
+        // Adicione aqui a ação a ser realizada quando o banner for pressionado
+    };
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Ionicons name="person-circle" size={80} color="#6C63FF" />
-                <View style={styles.userInfo}>
-                    <Text style={styles.userName}>{userData.name}</Text>
+            <View style={styles.userCard}>
+                <View style={styles.userCardContent}>
+                    <Text style={styles.greeting}>{`${greeting}, ${userData.name}`}</Text>
                     <Text style={styles.userEmail}>{userData.email}</Text>
                 </View>
+            </View>
+            <View style={styles.bannerContainer}>
+                {/* Renderizar os banners */}
+                <FlatList
+                    horizontal
+                    data={banners}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => handleBannerPress(item)}>
+                            <Image source={{ uri: item.image }} style={styles.bannerImage} />
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={(item, index) => index.toString()}
+                    contentContainerStyle={{ paddingRight: 20 }}
+                />
             </View>
             <View style={styles.subjectsContainer}>
                 <Text style={styles.sectionTitle}>Aulas do dia:</Text>
@@ -90,22 +134,36 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 40,
     },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 30,
+    userCard: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        marginBottom: 20,
+        elevation: 3,
     },
-    userInfo: {
+    userCardContent: {
         marginLeft: 20,
     },
-    userName: {
+    greeting: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#333',
+        marginBottom: 5,
     },
     userEmail: {
         fontSize: 18,
         color: '#666',
+        marginBottom: 5,
+    },
+    bannerContainer: {
+        height: 200,
+        marginBottom: 20,
+    },
+    bannerImage: {
+        width: windowWidth - 40, // Ajustando o tamanho do banner para ocupar toda a largura da tela com o padding horizontal
+        height: 200,
+        marginRight: 10,
+        borderRadius: 10,
     },
     subjectsContainer: {
         flex: 1,
@@ -114,7 +172,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
-        color: '#6C63FF',
+        color: '#253494',
     },
     subjectItem: {
         padding: 20,
