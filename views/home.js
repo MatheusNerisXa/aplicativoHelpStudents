@@ -53,24 +53,32 @@ export default function Home({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.userInfo}>
+            <View style={styles.header}>
                 <Ionicons name="person-circle" size={80} color="#6C63FF" />
-                <View style={styles.userDetails}>
+                <View style={styles.userInfo}>
                     <Text style={styles.userName}>{userData.name}</Text>
                     <Text style={styles.userEmail}>{userData.email}</Text>
                 </View>
             </View>
-            <Text style={styles.sectionTitle}>Aulas do dia:</Text>
-            <FlatList
-                data={todaySubjects}
-                renderItem={({ item }) => (
-                    <View style={styles.subjectItem}>
-                        <Text style={styles.subjectName}>{item.name}</Text>
-                        <Text style={styles.subjectDetails}>{item.startTime} - {item.endTime}, {item.location}</Text>
+            <View style={styles.subjectsContainer}>
+                <Text style={styles.sectionTitle}>Aulas do dia:</Text>
+                {todaySubjects.length > 0 ? (
+                    <FlatList
+                        data={todaySubjects}
+                        renderItem={({ item }) => (
+                            <View style={styles.subjectItem}>
+                                <Text style={styles.subjectName}>{item.name}</Text>
+                                <Text style={styles.subjectDetails}>{item.startTime} - {item.endTime}, {item.location}</Text>
+                            </View>
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                ) : (
+                    <View style={styles.noSubjectsContainer}>
+                        <Text style={styles.noSubjectsText}>Não há aulas para o dia.</Text>
                     </View>
                 )}
-                keyExtractor={(item, index) => index.toString()}
-            />
+            </View>
         </View>
     );
 }
@@ -78,15 +86,16 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
-        backgroundColor: '#FFF',
+        backgroundColor: '#f5f5f5',
+        paddingHorizontal: 20,
+        paddingTop: 40,
     },
-    userInfo: {
+    header: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 30,
     },
-    userDetails: {
+    userInfo: {
         marginLeft: 20,
     },
     userName: {
@@ -98,26 +107,38 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#666',
     },
+    subjectsContainer: {
+        flex: 1,
+    },
     sectionTitle: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 20,
         color: '#6C63FF',
     },
     subjectItem: {
-        padding: 15,
+        padding: 20,
         borderRadius: 10,
-        backgroundColor: '#F0F0F0',
-        marginBottom: 10,
+        backgroundColor: '#fff',
+        marginBottom: 20,
         elevation: 3,
     },
     subjectName: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#333',
     },
     subjectDetails: {
         fontSize: 16,
+        color: '#666',
+    },
+    noSubjectsContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+    },
+    noSubjectsText: {
+        fontSize: 18,
         color: '#666',
     },
 });
