@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../config/config.json';
 
@@ -11,7 +11,6 @@ export default function Home({ navigation }) {
     const [banners, setBanners] = useState([]);
     const [greeting, setGreeting] = useState('');
 
-    // Função para carregar os banners da API
     const loadBanners = async () => {
         try {
             const response = await fetch(`${config.urlRootNode}banners`);
@@ -74,8 +73,8 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         getUserData();
-        loadBanners(); // Carregar os banners ao montar a tela
-        getGreeting(); // Obter a saudação com base no horário
+        loadBanners();
+        getGreeting();
     }, []);
 
     const handleBannerPress = (item) => {
@@ -84,14 +83,11 @@ export default function Home({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.userCard}>
-                <View style={styles.userCardContent}>
-                    <Text style={styles.greeting}>{`${greeting}, ${userData.name}`}</Text>
-                    <Text style={styles.userEmail}>{userData.email}</Text>
-                </View>
+            <View style={styles.header}>
+                <Text style={styles.greeting}>{`${greeting}, ${userData.name}`}</Text>
+                <Text style={styles.userEmail}>{userData.email}</Text>
             </View>
             <View style={styles.bannerContainer}>
-                {/* Renderizar os banners */}
                 <FlatList
                     horizontal
                     data={banners}
@@ -106,22 +102,25 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.subjectsContainer}>
                 <Text style={styles.sectionTitle}>Aulas do dia:</Text>
-                {todaySubjects.length > 0 ? (
-                    <FlatList
-                        data={todaySubjects}
-                        renderItem={({ item }) => (
-                            <View style={styles.subjectItem}>
+                <FlatList
+                    data={todaySubjects}
+                    renderItem={({ item }) => (
+                        <View style={styles.subjectCard}>
+                            <Image source={{ uri: item.image }} style={styles.subjectImage} />
+                            <View style={styles.subjectCardContent}>
                                 <Text style={styles.subjectName}>{item.name}</Text>
-                                <Text style={styles.subjectDetails}>{item.startTime} - {item.endTime}, {item.location}</Text>
+                                <Text style={styles.subjectDetails}>{`${item.startTime} - ${item.endTime}`}</Text>
+                                <Text style={styles.subjectLocation}>{item.location}</Text>
                             </View>
-                        )}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                ) : (
-                    <View style={styles.noSubjectsContainer}>
-                        <Text style={styles.noSubjectsText}>Não há aulas para o dia.</Text>
-                    </View>
-                )}
+                        </View>
+                    )}
+                    keyExtractor={(item, index) => index.toString()}
+                    ListFooterComponent={() => (
+                        <View style={styles.subjectItemFooter}>
+                            <Text style={styles.footerText}>Fim das aulas do dia</Text>
+                        </View>
+                    )}
+                />
             </View>
         </View>
     );
@@ -130,37 +129,33 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
-        paddingHorizontal: 20,
-        paddingTop: 40,
-    },
-    userCard: {
         backgroundColor: '#fff',
+        paddingHorizontal: 20,
+        paddingTop: Platform.OS === 'ios' ? 40 : 20,
+    },
+    header: {
+        backgroundColor: '#253494',
         borderRadius: 10,
-        padding: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 30,
         marginBottom: 20,
         elevation: 3,
-    },
-    userCardContent: {
-        marginLeft: 20,
     },
     greeting: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#fff',
         marginBottom: 5,
     },
     userEmail: {
         fontSize: 18,
-        color: '#666',
-        marginBottom: 5,
+        color: '#fff',
     },
     bannerContainer: {
-        height: 200,
         marginBottom: 20,
     },
     bannerImage: {
-        width: windowWidth - 40, // Ajustando o tamanho do banner para ocupar toda a largura da tela com o padding horizontal
+        width: windowWidth - 40,
         height: 200,
         marginRight: 10,
         borderRadius: 10,
@@ -174,29 +169,45 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: '#253494',
     },
-    subjectItem: {
-        padding: 20,
-        borderRadius: 10,
+    subjectCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: '#fff',
-        marginBottom: 20,
+        borderRadius: 10,
+        marginBottom: 10,
+        padding: 10,
         elevation: 3,
     },
-    subjectName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
+    subjectImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 10,
+        marginRight: 10,
     },
-    subjectDetails: {
-        fontSize: 16,
-        color: '#666',
-    },
-    noSubjectsContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
+    subjectCardContent: {
         flex: 1,
     },
-    noSubjectsText: {
+    subjectName: {
         fontSize: 18,
+        fontWeight: 'bold',
+        color: '#253494',
+        marginBottom: 5,
+    },
+    subjectDetails: {
+        fontSize: 14,
         color: '#666',
+        marginBottom: 5,
+    },
+    subjectLocation: {
+        fontSize: 14,
+        color: '#666',
+    },
+    subjectItemFooter: {
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    footerText: {
+        color: '#253494',
+        fontWeight: 'bold',
     },
 });
