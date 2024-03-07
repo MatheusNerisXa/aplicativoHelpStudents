@@ -84,7 +84,7 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.greeting}>{`${greeting}, ${userData.name}`}</Text>
+                <Text style={styles.greeting}>{`${greeting}, ${userData.name.split(' ')[0]}`}</Text>
                 <Text style={styles.userEmail}>{userData.email}</Text>
             </View>
             <View style={styles.bannerContainer}>
@@ -105,21 +105,16 @@ export default function Home({ navigation }) {
                 <FlatList
                     data={todaySubjects}
                     renderItem={({ item }) => (
-                        <View style={styles.subjectCard}>
-                            <Image source={{ uri: item.image }} style={styles.subjectImage} />
-                            <View style={styles.subjectCardContent}>
+                        <TouchableOpacity style={styles.subjectCard} onPress={() => {}}>
+                            <View style={styles.subjectInfo}>
                                 <Text style={styles.subjectName}>{item.name}</Text>
-                                <Text style={styles.subjectDetails}>{`${item.startTime} - ${item.endTime}`}</Text>
+                                <Text style={styles.subjectTime}>{`${item.startTime} - ${item.endTime}`}</Text>
                                 <Text style={styles.subjectLocation}>{item.location}</Text>
                             </View>
-                        </View>
+                            <Image source={{ uri: item.image }} style={styles.subjectImage} />
+                        </TouchableOpacity>
                     )}
                     keyExtractor={(item, index) => index.toString()}
-                    ListFooterComponent={() => (
-                        <View style={styles.subjectItemFooter}>
-                            <Text style={styles.footerText}>Fim das aulas do dia</Text>
-                        </View>
-                    )}
                 />
             </View>
         </View>
@@ -171,20 +166,22 @@ const styles = StyleSheet.create({
     },
     subjectCard: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#fff',
         borderRadius: 10,
         marginBottom: 10,
         padding: 10,
         elevation: 3,
+        borderBottomWidth: 1,
+        borderBottomColor: '#253494', // cor da linha
     },
     subjectImage: {
         width: 80,
         height: 80,
         borderRadius: 10,
-        marginRight: 10,
     },
-    subjectCardContent: {
+    subjectInfo: {
         flex: 1,
     },
     subjectName: {
@@ -193,7 +190,7 @@ const styles = StyleSheet.create({
         color: '#253494',
         marginBottom: 5,
     },
-    subjectDetails: {
+    subjectTime: {
         fontSize: 14,
         color: '#666',
         marginBottom: 5,
@@ -201,13 +198,5 @@ const styles = StyleSheet.create({
     subjectLocation: {
         fontSize: 14,
         color: '#666',
-    },
-    subjectItemFooter: {
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    footerText: {
-        color: '#253494',
-        fontWeight: 'bold',
     },
 });
