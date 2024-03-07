@@ -79,7 +79,7 @@ export default function Home({ navigation }) {
 
         const interval = setInterval(() => {
             setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
-        }, 600);
+        }, 900);
 
         return () => clearInterval(interval);
     }, [banners]);
