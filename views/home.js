@@ -108,7 +108,7 @@ export default function Home({ navigation }) {
                         <TouchableOpacity style={styles.subjectCard} onPress={() => {}}>
                             <View style={styles.subjectInfo}>
                                 <Text style={styles.subjectName}>{item.name}</Text>
-                                <Text style={styles.subjectTime}>{`${item.startTime} - ${item.endTime}`}</Text>
+                                <Text style={styles.subjectTime}>{`${item.startTime.substring(0, 5)} às ${item.endTime.substring(0, 5)}`}</Text>
                                 <Text style={styles.subjectLocation}>{item.location}</Text>
                             </View>
                             <Image source={{ uri: item.image }} style={styles.subjectImage} />
