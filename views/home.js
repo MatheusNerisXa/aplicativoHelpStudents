@@ -10,6 +10,7 @@ export default function Home({ navigation }) {
     const [todaySubjects, setTodaySubjects] = useState([]);
     const [banners, setBanners] = useState([]);
     const [greeting, setGreeting] = useState('');
+    const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
     const loadBanners = async () => {
         try {
@@ -75,7 +76,13 @@ export default function Home({ navigation }) {
         getUserData();
         loadBanners();
         getGreeting();
-    }, []);
+
+        const interval = setInterval(() => {
+            setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
+        }, 600);
+
+        return () => clearInterval(interval);
+    }, [banners]);
 
     const handleBannerPress = (item) => {
         // Adicione aqui a ação a ser realizada quando o banner for pressionado
@@ -88,17 +95,7 @@ export default function Home({ navigation }) {
                 <Text style={styles.userEmail}>{userData.email}</Text>
             </View>
             <View style={styles.bannerContainer}>
-                <FlatList
-                    horizontal
-                    data={banners}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => handleBannerPress(item)}>
-                            <Image source={{ uri: item.image }} style={styles.bannerImage} />
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
-                    contentContainerStyle={{ paddingRight: 20 }}
-                />
+                <Image source={{ uri: banners[currentBannerIndex]?.image }} style={styles.bannerImage} />
             </View>
             <View style={styles.subjectsContainer}>
                 <Text style={styles.sectionTitle}>Aulas do dia:</Text>
@@ -152,7 +149,6 @@ const styles = StyleSheet.create({
     bannerImage: {
         width: windowWidth - 40,
         height: 200,
-        marginRight: 10,
         borderRadius: 10,
     },
     subjectsContainer: {
