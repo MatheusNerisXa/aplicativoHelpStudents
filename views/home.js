@@ -12,6 +12,7 @@ export default function Home({ navigation }) {
     const [banners, setBanners] = useState([]);
     const [greeting, setGreeting] = useState('');
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+    const [dailyStudyTip, setDailyStudyTip] = useState('');
 
     const loadUserData = async () => {
         try {
@@ -49,6 +50,21 @@ export default function Home({ navigation }) {
         }
     };
 
+    const loadDailyStudyTip = async () => {
+        try {
+            const response = await fetch(`${config.urlRootNode}studyTips`);
+            const data = await response.json();
+            console.log('Daily Study Tip:', data); // Log para verificar a dica de estudo diária recebida
+            // Verifica se há dados na resposta antes de configurar o estado
+            if (data && data.length > 0) {
+                setDailyStudyTip(data[0]); // Configura apenas o primeiro objeto do array como dailyStudyTip
+            }
+        } catch (error) {
+            console.error('Erro ao carregar dica de estudo do dia:', error);
+        }
+    };
+    
+
     const getToday = () => {
         const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
         const todayIndex = new Date().getDay();
@@ -68,14 +84,15 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         loadUserData();
-        loadBanners(); // Carregar os banners assim que o componente for montado
+        loadBanners();
+        loadDailyStudyTip();
         getGreeting();
     }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
-        }, 800);
+        }, 2000);
 
         return () => clearInterval(interval);
     }, [banners]);
@@ -84,21 +101,6 @@ export default function Home({ navigation }) {
         if (item.link) {
             Linking.openURL(item.link);
         }
-    };
-
-    const dailyStudyTips = [
-        'Dedique 30 minutos para revisar o conteúdo estudado ontem.',
-        'Reserve um momento para fazer uma pausa e alongar-se, isso ajuda a manter a concentração.',
-        'Defina metas de estudo específicas para o dia e acompanhe seu progresso.',
-        'Experimente diferentes técnicas de memorização, como mapas mentais ou resumos.',
-        'Organize seu espaço de estudo para que seja confortável e livre de distrações.',
-        'Faça anotações enquanto estuda para ajudar na compreensão e retenção do conteúdo.',
-        'Pratique exercícios de relaxamento para reduzir o estresse e aumentar a produtividade.',
-    ];
-
-    const getDailyStudyTip = () => {
-        const todayIndex = new Date().getDay();
-        return dailyStudyTips[todayIndex % dailyStudyTips.length];
     };
 
     return (
@@ -134,7 +136,7 @@ export default function Home({ navigation }) {
             </View>
             <View style={homeStyles.tipsContainer}>
                 <Text style={homeStyles.tipsTitle}>Dica de estudo do dia:</Text>
-                <Text style={homeStyles.tip}>{getDailyStudyTip()}</Text>
+                <Text style={homeStyles.tip}>{dailyStudyTip.description ? dailyStudyTip.description : 'Nenhuma dica disponível'}</Text>
             </View>
         </SafeAreaView>
     );

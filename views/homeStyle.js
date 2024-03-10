@@ -97,6 +97,14 @@ const homeStyles = StyleSheet.create({
         color: '#666',
         textAlign: 'center',
     },
+    tip: {
+        fontSize: 16,
+        fontWeight: 'normal',
+        color: '#333',
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+      },
 });
 
 export default homeStyles;

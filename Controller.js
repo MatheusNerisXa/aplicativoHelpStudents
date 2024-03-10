@@ -251,6 +251,17 @@ app.get('/banners', async (req, res) => {
     }
 });
 
+app.get('/studyTips', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /studyTips');
+        const studyTips = await model.StudyTip.findAll();
+        console.log('Dicas de estudo obtidas com sucesso:', studyTips);
+        res.json(studyTips);
+    } catch (error) {
+        console.error('Erro ao obter dicas de estudo:', error);
+        res.status(500).json({ error: 'Erro ao obter dicas de estudo.' });
+    }
+});
 
 // Start Server
 let port = process.env.PORT || 3000;
