@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Platform } from 'react-native';
+import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, Linking, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../config/config.json';
+import homeStyles from './homeStyle.js';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -12,46 +13,39 @@ export default function Home({ navigation }) {
     const [greeting, setGreeting] = useState('');
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
-    const loadBanners = async () => {
-        try {
-            const response = await fetch(`${config.urlRootNode}banners`);
-            const responseData = await response.json();
-            setBanners(responseData);
-        } catch (error) {
-            console.error('Erro ao buscar banners:', error);
-        }
-    };
-
-    const getUserData = async () => {
+    const loadUserData = async () => {
         try {
             const userDataString = await AsyncStorage.getItem('userData');
             if (userDataString) {
                 const userData = JSON.parse(userDataString);
                 setUserData(userData);
-                getLoggedInUserId(userData.email);
+                loadTodaySubjects(userData.email);
             }
         } catch (error) {
             console.error('Erro ao buscar dados do usuário:', error);
         }
     };
 
-    const getLoggedInUserId = async (email) => {
+    const loadTodaySubjects = async (email) => {
         try {
-            const response = await fetch(config.urlRootNode + `getUserId?email=${email}`);
-            const data = await response.json();
-            getTodaySubjects(data.userId);
+            const userIdResponse = await fetch(config.urlRootNode + `getUserId?email=${email}`);
+            const userIdData = await userIdResponse.json();
+
+            const todaySubjectsResponse = await fetch(`${config.urlRootNode}subjectsByDay?userId=${userIdData.userId}&day=${getToday()}`);
+            const todaySubjectsData = await todaySubjectsResponse.json();
+            setTodaySubjects(todaySubjectsData);
         } catch (error) {
-            console.error('Erro ao obter ID do usuário:', error);
+            console.error('Erro ao carregar aulas do dia:', error);
         }
     };
 
-    const getTodaySubjects = async (userId) => {
+    const loadBanners = async () => {
         try {
-            const response = await fetch(`${config.urlRootNode}subjectsByDay?userId=${userId}&day=${getToday()}`);
-            const responseData = await response.json();
-            setTodaySubjects(responseData);
+            const bannersResponse = await fetch(`${config.urlRootNode}banners`);
+            const bannersData = await bannersResponse.json();
+            setBanners(bannersData);
         } catch (error) {
-            console.error('Erro ao buscar as aulas do dia:', error);
+            console.error('Erro ao carregar banners:', error);
         }
     };
 
@@ -73,126 +67,75 @@ export default function Home({ navigation }) {
     };
 
     useEffect(() => {
-        getUserData();
-        loadBanners();
+        loadUserData();
+        loadBanners(); // Carregar os banners assim que o componente for montado
         getGreeting();
+    }, []);
 
+    useEffect(() => {
         const interval = setInterval(() => {
             setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
-        }, 900);
+        }, 800);
 
         return () => clearInterval(interval);
     }, [banners]);
 
     const handleBannerPress = (item) => {
-        // Adicione aqui a ação a ser realizada quando o banner for pressionado
+        if (item.link) {
+            Linking.openURL(item.link);
+        }
+    };
+
+    const dailyStudyTips = [
+        'Dedique 30 minutos para revisar o conteúdo estudado ontem.',
+        'Reserve um momento para fazer uma pausa e alongar-se, isso ajuda a manter a concentração.',
+        'Defina metas de estudo específicas para o dia e acompanhe seu progresso.',
+        'Experimente diferentes técnicas de memorização, como mapas mentais ou resumos.',
+        'Organize seu espaço de estudo para que seja confortável e livre de distrações.',
+        'Faça anotações enquanto estuda para ajudar na compreensão e retenção do conteúdo.',
+        'Pratique exercícios de relaxamento para reduzir o estresse e aumentar a produtividade.',
+    ];
+
+    const getDailyStudyTip = () => {
+        const todayIndex = new Date().getDay();
+        return dailyStudyTips[todayIndex % dailyStudyTips.length];
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.greeting}>{`${greeting}, ${userData.name.split(' ')[0]}`}</Text>
-                <Text style={styles.userEmail}>{userData.email}</Text>
+        <SafeAreaView style={homeStyles.container}>
+            <View style={homeStyles.header}>
+                <Text style={homeStyles.greeting}>{`${greeting}, ${userData.name.split(' ')[0]}` + '!'}</Text>
             </View>
-            <View style={styles.bannerContainer}>
-                <Image source={{ uri: banners[currentBannerIndex]?.image }} style={styles.bannerImage} />
+            <View style={homeStyles.bannerContainer}>
+                <TouchableOpacity onPress={() => handleBannerPress(banners[currentBannerIndex])}>
+                    <Image source={{ uri: banners[currentBannerIndex]?.image }} style={homeStyles.bannerImage} />
+                </TouchableOpacity>
             </View>
-            <View style={styles.subjectsContainer}>
-                <Text style={styles.sectionTitle}>Aulas do dia:</Text>
-                <FlatList
-                    data={todaySubjects}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity style={styles.subjectCard} onPress={() => {}}>
-                            <View style={styles.subjectInfo}>
-                                <Text style={styles.subjectName}>{item.name}</Text>
-                                <Text style={styles.subjectTime}>{`${item.startTime.substring(0, 5)} às ${item.endTime.substring(0, 5)}`}</Text>
-                                <Text style={styles.subjectLocation}>{item.location}</Text>
-                            </View>
-                            <Image source={{ uri: item.image }} style={styles.subjectImage} />
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
-                />
+            <View style={homeStyles.subjectsContainer}>
+                <Text style={homeStyles.sectionTitle}>Aulas do dia:</Text>
+                {todaySubjects.length === 0 ? (
+                    <Text style={homeStyles.noClassesText}>Não há aulas para o dia de hoje.</Text>
+                ) : (
+                    <FlatList
+                        data={todaySubjects}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity style={homeStyles.subjectCard} onPress={() => {}}>
+                                <View style={homeStyles.subjectInfo}>
+                                    <Text style={homeStyles.subjectName}>{item.name}</Text>
+                                    <Text style={homeStyles.subjectTime}>{`${item.startTime.substring(0, 5)} às ${item.endTime.substring(0, 5)}`}</Text>
+                                    <Text style={homeStyles.subjectLocation}>{item.location}</Text>
+                                </View>
+                                <Image source={{ uri: item.image }} style={homeStyles.subjectImage} />
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                )}
             </View>
-        </View>
+            <View style={homeStyles.tipsContainer}>
+                <Text style={homeStyles.tipsTitle}>Dica de estudo do dia:</Text>
+                <Text style={homeStyles.tip}>{getDailyStudyTip()}</Text>
+            </View>
+        </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: 20,
-        paddingTop: Platform.OS === 'ios' ? 40 : 20,
-    },
-    header: {
-        backgroundColor: '#253494',
-        borderRadius: 10,
-        paddingVertical: 20,
-        paddingHorizontal: 30,
-        marginBottom: 20,
-        elevation: 3,
-    },
-    greeting: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff',
-        marginBottom: 5,
-    },
-    userEmail: {
-        fontSize: 18,
-        color: '#fff',
-    },
-    bannerContainer: {
-        marginBottom: 20,
-    },
-    bannerImage: {
-        width: windowWidth - 40,
-        height: 200,
-        borderRadius: 10,
-    },
-    subjectsContainer: {
-        flex: 1,
-    },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        color: '#253494',
-    },
-    subjectCard: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        marginBottom: 10,
-        padding: 10,
-        elevation: 3,
-        borderBottomWidth: 1,
-        borderBottomColor: '#253494', // cor da linha
-    },
-    subjectImage: {
-        width: 80,
-        height: 80,
-        borderRadius: 10,
-    },
-    subjectInfo: {
-        flex: 1,
-    },
-    subjectName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#253494',
-        marginBottom: 5,
-    },
-    subjectTime: {
-        fontSize: 14,
-        color: '#666',
-        marginBottom: 5,
-    },
-    subjectLocation: {
-        fontSize: 14,
-        color: '#666',
-    },
-});
