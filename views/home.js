@@ -103,6 +103,10 @@ export default function Home({ navigation }) {
         }
     };
 
+    const getTotalClasses = () => {
+        return todaySubjects.length;
+    };
+
     return (
         <SafeAreaView style={homeStyles.container}>
             <View style={homeStyles.header}>
@@ -133,6 +137,8 @@ export default function Home({ navigation }) {
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )}
+                    <Text style={homeStyles.totalClassesText}>Total de aulas: {getTotalClasses()}</Text>
+
             </View>
             <View style={homeStyles.tipsContainer}>
                 <Text style={homeStyles.tipsTitle}>Dica de estudo do dia:</Text>

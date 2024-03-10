@@ -48,13 +48,13 @@ const homeStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#fff', // Fundo branco
         borderRadius: 10,
         marginBottom: 10,
         padding: 10,
         elevation: 3,
-        borderBottomWidth: 1,
-        borderBottomColor: '#253494', // cor da linha
+        borderWidth: 1,
+        borderColor: '#253494', // Cor da borda azul
     },
     subjectImage: {
         width: 80,
@@ -67,17 +67,17 @@ const homeStyles = StyleSheet.create({
     subjectName: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#253494',
+        color: '#253494', // Cor azul
         marginBottom: 5,
     },
     subjectTime: {
         fontSize: 14,
-        color: '#666',
+        color: '#666', // Cor cinza
         marginBottom: 5,
     },
     subjectLocation: {
         fontSize: 14,
-        color: '#666',
+        color: '#666', // Cor cinza
     },
     tipsContainer: {
         marginTop: 20,
@@ -90,21 +90,24 @@ const homeStyles = StyleSheet.create({
     },
     tip: {
         fontSize: 16,
-        marginBottom: 5,
+        fontWeight: 'normal',
+        color: '#333',
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
     },
     noClassesText: {
         fontSize: 16,
         color: '#666',
         textAlign: 'center',
     },
-    tip: {
+    totalClassesText: {
         fontSize: 16,
-        fontWeight: 'normal',
-        color: '#333',
+        fontWeight: 'bold',
         marginTop: 10,
-        marginLeft: 10,
-        marginRight: 10,
-      },
+        color: '#253494',
+        textAlign: 'center'
+    },
 });
 
 export default homeStyles;
