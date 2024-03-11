@@ -263,6 +263,40 @@ app.get('/studyTips', async (req, res) => {
     }
 });
 
+app.get('/stopwatches', async (req, res) => {
+    try {
+        console.log('Recebida requisição para /stopwatches');
+        const stopwatches = await model.Stopwatch.findAll();
+        console.log('Cronômetros obtidos com sucesso:', stopwatches);
+        res.json(stopwatches);
+    } catch (error) {
+        console.error('Erro ao obter cronômetros:', error);
+        res.status(500).json({ error: 'Erro ao obter cronômetros.' });
+    }
+});
+
+app.post('/stopwatches', async (req, res) => {
+    try {
+        console.log('Recebida requisição para criar um novo cronômetro');
+        const { description, subjectId, time, userId } = req.body;
+
+        // Verificar se todos os campos obrigatórios foram fornecidos
+        if (!description || !subjectId || !time || !userId) {
+            return res.status(400).json({ error: 'Descrição, subjectId, tempo e userId são obrigatórios.' });
+        }
+
+        // Criar o cronômetro no banco de dados
+        const stopwatch = await model.Stopwatch.create({ description, subjectId, time, userId });
+
+        console.log('Cronômetro criado com sucesso:', stopwatch);
+        res.status(201).json(stopwatch);
+    } catch (error) {
+        console.error('Erro ao criar o cronômetro:', error);
+        res.status(500).json({ error: 'Erro ao criar o cronômetro.' });
+    }
+});
+
+
 // Start Server
 let port = process.env.PORT || 3000;
 app.listen(port, (req, res) => {

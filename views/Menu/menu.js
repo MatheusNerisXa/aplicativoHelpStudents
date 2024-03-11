@@ -18,6 +18,8 @@ const Menu = () => {
       navigation.navigate('EntranceExamScreen');
     } else if (menuItem === 'Matérias') {
       navigation.navigate('SubjectsScreen');
+    } else if (menuItem === 'Estudo') {
+      navigation.navigate('StopwatchScreen');
     }
     else {
       navigation.navigate(menuItem);
@@ -58,9 +60,11 @@ const Menu = () => {
     { icon: 'help-network', text: 'Ajuda', color: '#2ecc71' },
     { icon: 'newspaper', text: 'Notícias', color: '#27ae60' },
     { icon: 'video', text: 'Vídeos', color: '#f39c12' },
-    { icon: 'account-convert', text: 'Vestibulares', color: '#9b59b6' }, // Adicionando o item "Vestibulares"
+    { icon: 'account-convert', text: 'Vestibulares', color: '#9b59b6' },
+    { icon: 'timer', text: 'Estudo', color: '#8e44ad' }, // Novo item "Estudo" com ícone de cronômetro
+    { icon: 'briefcase', text: 'Vagas de Emprego', color: '#d35400' }, // Novo item "Vagas de Emprego" com ícone de maleta
     { icon: 'file-document', text: 'Arquivos', color: '#34495e' }, // Adicionando o item "Arquivos"
-    { icon: 'logout', text: 'Sair', color: '#9b59b6' },
+    { icon: 'logout', text: 'Sair', color: '#9b59b6' }, // Botão "Sair" permanece o último à direita
   ];
 
   return (
@@ -105,6 +109,18 @@ const Menu = () => {
         {menuItems.slice(6, 8).map((item, index) => (
           <TouchableOpacity
             key={index + 6}
+            style={[styles.menuItem, { backgroundColor: item.color }]}
+            onPress={() => handleMenuItemPress(item.text)}
+          >
+            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
+            <Text style={styles.menuText}>{item.text}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.row}>
+        {menuItems.slice(8, 10).map((item, index) => (
+          <TouchableOpacity
+            key={index + 8}
             style={[styles.menuItem, { backgroundColor: item.color }]}
             onPress={() => handleMenuItemPress(item.text)}
           >

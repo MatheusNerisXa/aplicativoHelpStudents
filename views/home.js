@@ -54,7 +54,6 @@ export default function Home({ navigation }) {
         try {
             const response = await fetch(`${config.urlRootNode}studyTips`);
             const data = await response.json();
-            console.log('Daily Study Tip:', data); // Log para verificar a dica de estudo diária recebida
             // Verifica se há dados na resposta antes de configurar o estado
             if (data && data.length > 0) {
                 setDailyStudyTip(data[0]); // Configura apenas o primeiro objeto do array como dailyStudyTip
