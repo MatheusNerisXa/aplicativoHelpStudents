@@ -317,8 +317,32 @@ app.get('/stopwatches/:userId', async (req, res) => {
     }
 });
 
+app.delete('/stopwatches/:stopwatchId', async (req, res) => {
+    try {
+        console.log('Recebida requisição para excluir um cronômetro');
+        const stopwatchId = req.params.stopwatchId;
 
+        // Verificar se o ID do cronômetro foi fornecido
+        if (!stopwatchId) {
+            return res.status(400).json({ error: 'ID do cronômetro é obrigatório.' });
+        }
 
+        // Verificar se o cronômetro existe no banco de dados
+        const existingStopwatch = await model.Stopwatch.findByPk(stopwatchId);
+        if (!existingStopwatch) {
+            return res.status(404).json({ error: 'Cronômetro não encontrado.' });
+        }
+
+        // Excluir o cronômetro do banco de dados
+        await model.Stopwatch.destroy({ where: { id: stopwatchId } });
+
+        console.log('Cronômetro excluído com sucesso');
+        res.status(204).send(); // Retorna uma resposta de sucesso sem conteúdo
+    } catch (error) {
+        console.error('Erro ao excluir o cronômetro:', error);
+        res.status(500).json({ error: 'Erro ao excluir o cronômetro.' });
+    }
+});
 
 // Start Server
 let port = process.env.PORT || 3000;

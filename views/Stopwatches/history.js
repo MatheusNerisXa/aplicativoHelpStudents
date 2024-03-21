@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../../config/config.json';
 import { Ionicons } from '@expo/vector-icons';
@@ -53,11 +53,14 @@ const HistoryScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <View style={historyStyles.historyItem}>
       <Text style={historyStyles.description}>Descrição: {item.description}</Text>
       <Text style={historyStyles.time}>Tempo: {formatTime(item.time)}</Text>
       <Text style={historyStyles.createdAt}>Criado em: {formatDate(item.createdAt)}</Text>
+      <TouchableOpacity style={historyStyles.deleteButton} onPress={() => handleDelete(index)}>
+        <Ionicons name="trash-outline" size={24} color="red" />
+      </TouchableOpacity>
     </View>
   );
 
@@ -80,27 +83,49 @@ const HistoryScreen = () => {
     setStopwatches(filteredStopwatches);
   };
 
+  const handleDelete = async (index) => {
+    const stopwatchId = stopwatches[index].id;
+
+    try {
+      const response = await fetch(`${config.urlRootNode}stopwatches/${stopwatchId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        const updatedStopwatches = [...stopwatches];
+        updatedStopwatches.splice(index, 1);
+        setStopwatches(updatedStopwatches);
+        Alert.alert('Sucesso', 'O cronômetro foi excluído com sucesso.');
+      } else {
+        Alert.alert('Erro', 'Erro ao excluir o cronômetro.');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir o cronômetro:', error);
+      Alert.alert('Erro', 'Erro ao excluir o cronômetro.');
+    }
+  };
+
   return (
     <View style={historyStyles.container}>
       <View style={historyStyles.searchBar}>
-          <TextInput
-            style={historyStyles.input}
-            placeholder="Pesquisar pela descrição"
-            placeholderTextColor="#FFF"
-            value={searchText}
-            onChangeText={handleSearch}
-          />
-          <TouchableOpacity
-            style={historyStyles.searchIcon}
-            onPress={() => handleSearch(searchText)}
-          >
-            <Ionicons name="search" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
+        <TextInput
+          style={historyStyles.input}
+          placeholder="Pesquisar pela descrição"
+          placeholderTextColor="#FFF"
+          value={searchText}
+          onChangeText={handleSearch}
+        />
+        <TouchableOpacity
+          style={historyStyles.searchIcon}
+          onPress={() => handleSearch(searchText)}
+        >
+          <Ionicons name="search" size={24} color="#fff" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={stopwatches}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()} 
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );

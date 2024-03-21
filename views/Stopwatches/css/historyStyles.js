@@ -44,16 +44,24 @@ export const historyStyles = StyleSheet.create({
         backgroundColor: '#253494',
         borderRadius: 5,
         overflow: 'hidden',
-      },
-      input: {
+    },
+    input: {
         flex: 1,
         height: 40,
         paddingHorizontal: 10,
         fontFamily: 'sans-serif',
         fontSize: 14,
         color: '#fff',
-      },
-      searchIcon: {
+    },
+    searchIcon: {
         padding: 10,
-      },
+    },
+    deleteButton: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        backgroundColor: 'transparent',
+        borderRadius: 20,
+        padding: 5,
+    },
 });
