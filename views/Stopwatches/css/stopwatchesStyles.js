@@ -47,7 +47,7 @@ export const stopwatchesStyles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 30,
+    marginTop: 10,
     width: '100%',
   },
   button: {

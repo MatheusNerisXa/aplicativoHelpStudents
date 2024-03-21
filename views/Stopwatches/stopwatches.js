@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { stopwatchesStyles } from './css/stopwatchesStyles';
 import { useNavigation } from '@react-navigation/native';
 
-
 const StopwatchScreen = () => {
   const navigation = useNavigation();
 
@@ -148,30 +147,30 @@ const StopwatchScreen = () => {
             </View>
           </Animated.View>
           <TextInput
-            style={[stopwatchesStyles.input, { width: width * 0.9 }]}
-            placeholder="Descrição"
-            value={description}
-            onChangeText={setDescription}
-          />
-          <Picker
-            selectedValue={selectedSubjectId}
-            onValueChange={(itemValue) => setSelectedSubjectId(itemValue)}
-            style={[stopwatchesStyles.picker, { width: width * 0.9 }]}
-          >
-            <Picker.Item label="Selecione uma matéria" value={null} />
-            {subjects.map((subject) => (
-              <Picker.Item key={subject.id} label={subject.name} value={subject.id} />
-            ))}
-          </Picker>
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginBottom: 20 }}>
-            <TouchableOpacity style={stopwatchesStyles.historyButton} onPress={handleHistory}>
-              <Text style={stopwatchesStyles.historyButtonText}>Histórico</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={stopwatchesStyles.saveButton} onPress={handleSave}>
-              <Text style={stopwatchesStyles.buttonText}>Salvar</Text>
-            </TouchableOpacity>
-          </View>
+    style={[stopwatchesStyles.input, { width: width * 0.9 }]}
+    placeholder="Descrição"
+    value={description}
+    onChangeText={setDescription}
+  />
+  <Picker
+    selectedValue={selectedSubjectId}
+    onValueChange={(itemValue) => setSelectedSubjectId(itemValue)}
+    style={[stopwatchesStyles.picker, { width: width * 0.9, marginTop: -10 }]} // Adicionando marginTop negativo
+  >
+    <Picker.Item label="Selecione uma matéria" value={null} />
+    {subjects.map((subject) => (
+      <Picker.Item key={subject.id} label={subject.name} value={subject.id} />
+    ))}
+  </Picker>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: width * 0.9, marginTop: 10 }}>
+    <TouchableOpacity style={stopwatchesStyles.historyButton} onPress={handleHistory}>
+      <Text style={stopwatchesStyles.historyButtonText}>Histórico</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={stopwatchesStyles.saveButton} onPress={handleSave}>
+      <Text style={stopwatchesStyles.buttonText}>Salvar</Text>
+    </TouchableOpacity>
+  </View>
+</View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

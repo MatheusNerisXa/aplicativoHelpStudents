@@ -260,7 +260,7 @@ const TabNavigator = ({ route, navigation }) => {
       headerLeft: () => (
         <TouchableOpacity
           style={{ marginLeft: 16 }}
-          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+          onPress={() => navigation.navigate('StopwatchScreen')} // Navegação de volta para o menu
         >
           <MaterialIcons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
