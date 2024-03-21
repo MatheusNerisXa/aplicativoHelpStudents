@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../../config/config.json';
+import { Ionicons } from '@expo/vector-icons';
 import { historyStyles } from './css/historyStyles';
 
 const HistoryScreen = () => {
   const [stopwatches, setStopwatches] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [originalData, setOriginalData] = useState([]); // Armazena os dados originais
 
   useEffect(() => {
     fetchUserData();
@@ -41,6 +44,7 @@ const HistoryScreen = () => {
       if (response.ok) {
         const data = await response.json();
         setStopwatches(data);
+        setOriginalData(data); // Salva os dados originais
       } else {
         console.error('Erro ao buscar cronômetros:', response.status);
       }
@@ -68,8 +72,31 @@ const HistoryScreen = () => {
     return date.toLocaleString('pt-BR');
   };
 
+  const handleSearch = (text) => {
+    setSearchText(text);
+    const filteredStopwatches = originalData.filter(item =>
+      item.description.toLowerCase().includes(text.toLowerCase())
+    );
+    setStopwatches(filteredStopwatches);
+  };
+
   return (
     <View style={historyStyles.container}>
+      <View style={historyStyles.searchBar}>
+          <TextInput
+            style={historyStyles.input}
+            placeholder="Pesquisar pela descrição"
+            placeholderTextColor="#FFF"
+            value={searchText}
+            onChangeText={handleSearch}
+          />
+          <TouchableOpacity
+            style={historyStyles.searchIcon}
+            onPress={() => handleSearch(searchText)}
+          >
+            <Ionicons name="search" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
       <FlatList
         data={stopwatches}
         renderItem={renderItem}
