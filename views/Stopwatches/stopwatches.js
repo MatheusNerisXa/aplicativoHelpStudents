@@ -5,8 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import config from '../../config/config.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { stopwatchesStyles } from './css/stopwatchesStyles';
+import { useNavigation } from '@react-navigation/native';
+
 
 const StopwatchScreen = () => {
+  const navigation = useNavigation();
+
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
   const [description, setDescription] = useState('');
@@ -119,9 +123,8 @@ const StopwatchScreen = () => {
   };
 
   const handleHistory = () => {
-    console.log('Botão de histórico pressionado');
+    navigation.navigate('HistoryScreen');
   };
-
   const handleOrientationChange = () => {
     setWidth(Dimensions.get('window').width);
   };

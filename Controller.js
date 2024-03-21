@@ -296,6 +296,29 @@ app.post('/stopwatches', async (req, res) => {
     }
 });
 
+app.get('/stopwatches/:userId', async (req, res) => {
+    try {
+        console.log('Recebida requisição para buscar cronômetros do usuário com ID:', req.params.userId);
+        const userId = req.params.userId;
+
+        // Verificar se o ID do usuário foi fornecido
+        if (!userId) {
+            return res.status(400).json({ error: 'ID do usuário é obrigatório.' });
+        }
+
+        // Recuperar os cronômetros do usuário do banco de dados
+        const stopwatches = await model.Stopwatch.findAll({ where: { userId } });
+
+        console.log('Cronômetros do usuário encontrados:', stopwatches);
+        res.status(200).json(stopwatches);
+    } catch (error) {
+        console.error('Erro ao buscar cronômetros do usuário:', error);
+        res.status(500).json({ error: 'Erro ao buscar cronômetros do usuário.' });
+    }
+});
+
+
+
 
 // Start Server
 let port = process.env.PORT || 3000;

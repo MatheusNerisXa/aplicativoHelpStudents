@@ -109,7 +109,7 @@ export default function Home({ navigation }) {
     return (
         <SafeAreaView style={homeStyles.container}>
             <View style={homeStyles.header}>
-                <Text style={homeStyles.greeting}>{`${greeting}, ${userData.name.split(' ')[0]}` + '!'}</Text>
+            <Text style={homeStyles.greeting}>{`${greeting}, ${userData.name ? userData.name.split(' ')[0] : ''}` + '!'}</Text>
             </View>
             <View style={homeStyles.bannerContainer}>
                 <TouchableOpacity onPress={() => handleBannerPress(banners[currentBannerIndex])}>
