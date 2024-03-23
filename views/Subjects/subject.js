@@ -52,11 +52,9 @@ const SubjectsScreen = () => {
   };
 
   const getRandomColor = () => {
-    let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    while (color === '#ffffff') {
-      color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    }
-    return color;
+    // Geração de cores no tom azul semelhante a #253494
+    const blueShades = ["#253494", "#274a88", "#28508c", "#2a5590", "#2b5b94", "#2d6198", "#2e679c", "#306da0", "#3173a4", "#3379a8"];
+    return blueShades[Math.floor(Math.random() * blueShades.length)];
   };
 
   const renderSubjectCard = ({ item }) => {

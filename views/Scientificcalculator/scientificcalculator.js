@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: 50,
       right: 0,
-      backgroundColor: '#4CAF50', // verde
+      backgroundColor: '#253494',
       width: 100,
       height: 40,
       justifyContent: 'center',
