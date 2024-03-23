@@ -37,6 +37,9 @@ const ScientificCalculator = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.scientificButton} onPress={() => handleButtonPress('Toggle')}>
+        <Text style={styles.buttonText}>{isScientificMode ? 'Voltar' : 'Científica'}</Text>
+      </TouchableOpacity>
       <View style={styles.display}>
         <Text style={styles.expression}>{expression}</Text>
       </View>
@@ -89,9 +92,6 @@ const ScientificCalculator = () => {
             </View>
           </>
         )}
-        <View style={styles.row}>
-          <TouchableOpacity style={styles.scientificButton} onPress={() => handleButtonPress('Toggle')}><Text style={styles.buttonText}>{isScientificMode ? 'Voltar' : 'Científica'}</Text></TouchableOpacity>
-        </View>
       </View>
     </View>
   );
@@ -100,7 +100,7 @@ const ScientificCalculator = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#212121',
+      backgroundColor: '#FFF',
     },
     display: {
       flex: 1,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     },
     expression: {
       fontSize: 24,
-      color: '#fff',
+      color: '#000',
     },
     buttons: {
       paddingBottom: 20,
@@ -123,24 +123,28 @@ const styles = StyleSheet.create({
     button: {
       width: 60,
       height: 60,
-      backgroundColor: '#424242',
+      backgroundColor: '#253494',
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 30,
     },
     scientificButton: {
-      width: 180,
-      height: 60,
-      backgroundColor: '#ff9800',
+      position: 'absolute',
+      top: 50,
+      right: 0,
+      backgroundColor: '#4CAF50', // verde
+      width: 100,
+      height: 40,
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 30,
+      borderRadius: 5,
+      marginRight: 10,
+      marginTop: 10,
     },
     buttonText: {
       color: '#fff',
       fontSize: 20,
     },
   });
-  
-
+    
 export default ScientificCalculator;
