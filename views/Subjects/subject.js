@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import config from '../../config/config.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { subjectStyles } from './css/subjectStyles';
 
 const SubjectsScreen = () => {
   const [subjects, setSubjects] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [originalSubjects, setOriginalSubjects] = useState([]); // Armazenar as matérias originais
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -20,7 +23,6 @@ const SubjectsScreen = () => {
 
           const response = await fetch(config.urlRootNode + `getUserId?email=${email}`);
           const data = await response.json();
-          console.log('ID do usuário:', data.userId);
           setUserId(data.userId);
           
           fetchSubjects(data.userId);
@@ -37,8 +39,9 @@ const SubjectsScreen = () => {
     try {
       const response = await fetch(`${config.urlRootNode}subjects?userId=${userId}`);
       const data = await response.json();
-      console.log('Matérias recebidas:', data); // Verifica se os dados das matérias estão corretos
+      console.log('Matérias recebidas:', data); 
       setSubjects(data);
+      setOriginalSubjects(data); // Salvar as matérias originais
     } catch (error) {
       console.error('Erro ao buscar matérias:', error);
     }
@@ -49,39 +52,45 @@ const SubjectsScreen = () => {
   };
 
   const getRandomColor = () => {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    let color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    while (color === '#ffffff') {
+      color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
+    return color;
   };
 
   const renderSubjectCard = ({ item }) => {
     const bgColor = getRandomColor();
-    const cardStyle = { ...styles.card, backgroundColor: bgColor };
+    const cardStyle = { ...subjectStyles.card, borderLeftColor: bgColor };
     const textColor = getTextColor(bgColor);
   
-    console.log('Dias:', item.days); // Verifica se item.days está sendo recebido corretamente
-  
+    console.log('Dias:', item.days); 
+
     let daysString = '';
   
     if (Array.isArray(item.days)) {
       if (item.days.length === 1) {
-        // Se houver apenas um dia, exibe-o normalmente
         daysString = item.days[0];
       } else {
-        // Se houver mais de um dia, exibe-os em uma lista separada por vírgulas
         daysString = item.days.join(', ');
       }
     } else {
-      // Se não for um array, exibe o valor normalmente
       daysString = item.days;
     }
   
     return (
       <TouchableOpacity onPress={() => handleSubjectPress(item)} style={cardStyle}>
-        <Text style={[styles.subjectName, { color: textColor }]}>{item.name}</Text>
-        <Text style={[styles.subjectProfessor, { color: textColor }]}>Professor: {item.professor}</Text>
-        <Text style={[styles.subjectTime, { color: textColor }]}>Horário: {item.startTime} - {item.endTime}</Text>
-        <Text style={[styles.subjectDays, { color: textColor }]}>Dias: {daysString}</Text>
-        <Text style={[styles.subjectLocation, { color: textColor }]}>Local: {item.location}</Text>
-        <Text style={[styles.subjectStatus, { color: textColor }]}>Status: {item.status}</Text>
+        <View style={subjectStyles.cardContainer}>
+          <View style={[subjectStyles.leftBorder, { backgroundColor: bgColor }]} />
+          <View style={subjectStyles.cardContent}>
+            <Text style={[subjectStyles.subjectName, { color: '#000' }]}>{item.name}</Text>
+            <Text style={[subjectStyles.subjectProfessor, { color: '#000' }]}>Professor: {item.professor}</Text>
+            <Text style={[subjectStyles.subjectTime, { color: '#000' }]}>Horário: {item.startTime} - {item.endTime}</Text>
+            <Text style={[subjectStyles.subjectDays, { color: '#000' }]}>Dias: {daysString}</Text>
+            <Text style={[subjectStyles.subjectLocation, { color: '#000' }]}>Local: {item.location}</Text>
+            <Text style={[subjectStyles.subjectStatus, { color: '#000' }]}>Status: {item.status}</Text>
+          </View>
+        </View>
       </TouchableOpacity>
     );
   };  
@@ -93,75 +102,46 @@ const SubjectsScreen = () => {
     const b = parseInt(hex.substring(4, 6), 16);
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 125 ? '#000' : '#fff';
+};
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+    if (text === '') {
+      setSubjects(originalSubjects); // Restaurar as matérias originais quando o texto de pesquisa é vazio
+    } else {
+      const filteredSubjects = originalSubjects.filter(subject =>
+        subject.name.toLowerCase().includes(text.toLowerCase())
+      );
+      setSubjects(filteredSubjects);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <View style={subjectStyles.container}>
+      <View style={subjectStyles.searchBar}>
+        <TextInput
+          style={subjectStyles.input}
+          placeholder="Pesquisar pelo nome da matéria"
+          placeholderTextColor="#fff"
+          value={searchText}
+          onChangeText={handleSearch}
+        />
+        <TouchableOpacity style={subjectStyles.searchIcon} onPress={() => handleSearch(searchText)}>
+          <AntDesign name="search1" size={24} color="#fff" />
+        </TouchableOpacity>
+      </View>
+      <ScrollView contentContainerStyle={subjectStyles.scrollViewContent}>
         {subjects.map((subject, index) => (
-          <View key={index}>
+          <View key={index} style={subjectStyles.cardWrapper}>
             {renderSubjectCard({ item: subject })}
           </View>
         ))}
       </ScrollView>
-      <TouchableOpacity onPress={() => navigation.navigate('CreateSubjectScreen')} style={styles.addButton}>
+      <TouchableOpacity onPress={() => navigation.navigate('CreateSubjectScreen')} style={subjectStyles.addButton}>
         <AntDesign name="plus" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  card: {
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 2,
-  },
-  subjectName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  subjectProfessor: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  subjectTime: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  subjectDays: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  subjectLocation: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  subjectDates: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  subjectStatus: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  addButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#253494',
-    borderRadius: 50,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
-  },
-});
 
 export default SubjectsScreen;
