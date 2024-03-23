@@ -22,8 +22,11 @@ const Menu = () => {
       navigation.navigate('StopwatchScreen');
     } else if (menuItem === 'Ajuda') {
       navigation.navigate('HelpScreen');
-    }
-    else {
+    } else if (menuItem === 'Calculadora Científica') {
+      // Adicione aqui a navegação para a tela da Calculadora Científica
+    } else if (menuItem === 'Correção de Textos') {
+      // Adicione aqui a navegação para a tela de Correção de Textos
+    } else {
       navigation.navigate(menuItem);
     }
   };
@@ -41,9 +44,7 @@ const Menu = () => {
           text: 'Sair',
           onPress: async () => {
             try {
-              // Remover os dados de login do AsyncStorage
               await AsyncStorage.removeItem('userData');
-              // Navegar de volta para a tela de login
               navigation.replace('Login');
             } catch (error) {
               console.error('Error during logout:', error);
@@ -63,74 +64,26 @@ const Menu = () => {
     { icon: 'newspaper', text: 'Notícias', color: '#27ae60' },
     { icon: 'video', text: 'Vídeos', color: '#f39c12' },
     { icon: 'account-convert', text: 'Vestibulares', color: '#9b59b6' },
-    { icon: 'timer', text: 'Estudo', color: '#8e44ad' }, // Novo item "Estudo" com ícone de cronômetro
-    { icon: 'briefcase', text: 'Vagas de Emprego', color: '#d35400' }, // Novo item "Vagas de Emprego" com ícone de maleta
-    { icon: 'file-document', text: 'Arquivos', color: '#34495e' }, // Adicionando o item "Arquivos"
-    { icon: 'logout', text: 'Sair', color: '#9b59b6' }, // Botão "Sair" permanece o último à direita
+    { icon: 'timer', text: 'Estudo', color: '#8e44ad' },
+    { icon: 'briefcase', text: 'Vagas de Emprego', color: '#d35400' },
+    { icon: 'file-document', text: 'Arquivos', color: '#34495e' },
+    { icon: 'calculator-variant', text: 'Calc. Científica', color: '#1abc9c' },
+    { icon: 'book', text: 'Correção de Textos', color: '#e67e22' },
+    { icon: 'logout', text: 'Sair', color: 'red' },
   ];
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        {menuItems.slice(0, 2).map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.menuItem, { backgroundColor: item.color }]}
-            onPress={() => handleMenuItemPress(item.text)}
-          >
-            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
-            <Text style={styles.menuText}>{item.text}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.row}>
-        {menuItems.slice(2, 4).map((item, index) => (
-          <TouchableOpacity
-            key={index + 2}
-            style={[styles.menuItem, { backgroundColor: item.color }]}
-            onPress={() => handleMenuItemPress(item.text)}
-          >
-            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
-            <Text style={styles.menuText}>{item.text}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.row}>
-        {menuItems.slice(4, 6).map((item, index) => (
-          <TouchableOpacity
-            key={index + 4}
-            style={[styles.menuItem, { backgroundColor: item.color }]}
-            onPress={() => handleMenuItemPress(item.text)}
-          >
-            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
-            <Text style={styles.menuText}>{item.text}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.row}>
-        {menuItems.slice(6, 8).map((item, index) => (
-          <TouchableOpacity
-            key={index + 6}
-            style={[styles.menuItem, { backgroundColor: item.color }]}
-            onPress={() => handleMenuItemPress(item.text)}
-          >
-            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
-            <Text style={styles.menuText}>{item.text}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.row}>
-        {menuItems.slice(8, 10).map((item, index) => (
-          <TouchableOpacity
-            key={index + 8}
-            style={[styles.menuItem, { backgroundColor: item.color }]}
-            onPress={() => handleMenuItemPress(item.text)}
-          >
-            <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
-            <Text style={styles.menuText}>{item.text}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {menuItems.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[styles.menuItem, { backgroundColor: item.color }]}
+          onPress={() => handleMenuItemPress(item.text)}
+        >
+          <MaterialCommunityIcons name={item.icon} size={24} color="#fff" />
+          <Text style={styles.menuText}>{item.text}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
@@ -139,23 +92,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     paddingVertical: 20,
     paddingHorizontal: 10,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
   menuItem: {
-    flex: 1,
+    width: '48%',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 15,
     borderRadius: 10,
     elevation: 5,
-    margin: 4,
-    width: '48%', // Ajustando o tamanho para permitir espaço entre os itens
+    marginBottom: 10,
   },
   menuText: {
     color: '#fff',

@@ -84,7 +84,7 @@ const ChatScreen = () => {
           placeholderTextColor="#777"
           multiline={true}
           numberOfLines={4}
-          maxLength={200} 
+          maxLength={1500} 
         />
         <TouchableOpacity style={chat.sendButton} onPress={handleMessageSend}>
           {sending ? (
