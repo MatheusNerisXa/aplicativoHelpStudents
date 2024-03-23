@@ -19,6 +19,7 @@ import CreateSubjectScreen from './views/Subjects/createSubject';
 import StopwatchScreen from './views/Stopwatches/stopwatches';
 import HistoryScreen from './views/Stopwatches/history';
 import HelpScreen from './views/Help/helpscreen';
+import ScientificCalculator from './views/Scientificcalculator/scientificcalculator';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -271,6 +272,28 @@ const TabNavigator = ({ route, navigation }) => {
   />
 
 <Tab.Screen
+      name="ScientificCalculator"
+      component={ScientificCalculator}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Calculadora Científica',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+<Tab.Screen
       name="HistoryScreen"
       component={HistoryScreen}
       options={({ navigation }) => ({
@@ -497,6 +520,24 @@ export default function App() {
             headerStyle: { backgroundColor: '#253494' },
             headerTintColor: 'white',
             title: 'Ajuda',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+         <Stack.Screen
+          name="ScientificCalculator"
+          component={ScientificCalculator}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Calculadora Científica',
             headerLeft: ({ onPress }) => (
               <TouchableOpacity
                 style={{ marginLeft: 16 }}

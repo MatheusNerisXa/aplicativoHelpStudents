@@ -22,8 +22,8 @@ const Menu = () => {
       navigation.navigate('StopwatchScreen');
     } else if (menuItem === 'Ajuda') {
       navigation.navigate('HelpScreen');
-    } else if (menuItem === 'Calculadora Científica') {
-      // Adicione aqui a navegação para a tela da Calculadora Científica
+    } else if (menuItem === 'Calculadora') {
+      navigation.navigate('ScientificCalculator');
     } else if (menuItem === 'Correção de Textos') {
       // Adicione aqui a navegação para a tela de Correção de Textos
     } else {
@@ -67,7 +67,7 @@ const Menu = () => {
     { icon: 'timer', text: 'Estudo', color: '#8e44ad' },
     { icon: 'briefcase', text: 'Vagas de Emprego', color: '#d35400' },
     { icon: 'file-document', text: 'Arquivos', color: '#34495e' },
-    { icon: 'calculator-variant', text: 'Calc. Científica', color: '#1abc9c' },
+    { icon: 'calculator-variant', text: 'Calculadora', color: '#1abc9c' },
     { icon: 'book', text: 'Correção de Textos', color: '#e67e22' },
     { icon: 'logout', text: 'Sair', color: 'red' },
   ];
