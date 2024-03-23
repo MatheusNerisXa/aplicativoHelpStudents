@@ -109,7 +109,7 @@ export default function Home({ navigation }) {
     return (
         <SafeAreaView style={homeStyles.container}>
             <View style={homeStyles.header}>
-            <Text style={homeStyles.greeting}>{`${greeting}, ${userData.name ? userData.name.split(' ')[0] : ''}` + '!'}</Text>
+                <Text style={homeStyles.greeting}>{`${greeting}, ${userData.name ? userData.name.split(' ')[0] : ''}` + '!'}</Text>
             </View>
             <View style={homeStyles.bannerContainer}>
                 <TouchableOpacity onPress={() => handleBannerPress(banners[currentBannerIndex])}>
@@ -126,18 +126,19 @@ export default function Home({ navigation }) {
                         renderItem={({ item }) => (
                             <TouchableOpacity style={homeStyles.subjectCard} onPress={() => {}}>
                                 <View style={homeStyles.subjectInfo}>
-                                    <Text style={homeStyles.subjectName}>{item.name}</Text>
-                                    <Text style={homeStyles.subjectTime}>{`${item.startTime.substring(0, 5)} às ${item.endTime.substring(0, 5)}`}</Text>
-                                    <Text style={homeStyles.subjectLocation}>{item.location}</Text>
+                                    <Image source={{ uri: item.image }} style={homeStyles.subjectIcon} />
+                                    <View style={homeStyles.subjectTextContainer}>
+                                        <Text style={homeStyles.subjectName}>{item.name}</Text>
+                                        <Text style={homeStyles.subjectTime}>{`${item.startTime.substring(0, 5)} às ${item.endTime.substring(0, 5)}`}</Text>
+                                        <Text style={homeStyles.subjectLocation}>{item.location}</Text>
+                                    </View>
                                 </View>
-                                <Image source={{ uri: item.image }} style={homeStyles.subjectImage} />
                             </TouchableOpacity>
                         )}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )}
-                    <Text style={homeStyles.totalClassesText}>Total de aulas: {getTotalClasses()}</Text>
-
+                <Text style={homeStyles.totalClassesText}>Total de aulas: {getTotalClasses()}</Text>
             </View>
             <View style={homeStyles.tipsContainer}>
                 <Text style={homeStyles.tipsTitle}>Dica de estudo do dia:</Text>
@@ -146,3 +147,4 @@ export default function Home({ navigation }) {
         </SafeAreaView>
     );
 }
+``
