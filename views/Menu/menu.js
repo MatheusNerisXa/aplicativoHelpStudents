@@ -20,6 +20,8 @@ const Menu = () => {
       navigation.navigate('SubjectsScreen');
     } else if (menuItem === 'Estudo') {
       navigation.navigate('StopwatchScreen');
+    } else if (menuItem === 'Ajuda') {
+      navigation.navigate('HelpScreen');
     }
     else {
       navigation.navigate(menuItem);
