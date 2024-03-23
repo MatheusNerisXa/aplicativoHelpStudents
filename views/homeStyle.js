@@ -4,7 +4,7 @@ const windowWidth = Dimensions.get('window').width;
 
 const homeStyles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 20,
         paddingVertical: 20,
@@ -12,21 +12,22 @@ const homeStyles = StyleSheet.create({
     header: {
         backgroundColor: '#253494',
         borderRadius: 10,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 30,
         marginBottom: 20,
+        elevation: 3,
     },
     greeting: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#fff',
+        marginBottom: 5,
     },
     userEmail: {
         fontSize: 18,
         color: '#fff',
     },
     bannerContainer: {
-        alignItems: 'center',
         marginBottom: 20,
     },
     bannerImage: {
@@ -47,30 +48,29 @@ const homeStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)', // Fundo branco com opacidade
+        backgroundColor: '#fff', // Fundo branco
         borderRadius: 10,
         marginBottom: 10,
-        padding: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        padding: 10,
         elevation: 3,
         borderWidth: 1,
         borderColor: '#253494', // Cor da borda azul
     },
-    subjectIcon: {
-        width: 60,
-        height: 60,
+    subjectImage: {
+        width: 80,
+        height: 80,
         borderRadius: 10,
     },
     subjectInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    subjectTextContainer: {
-        marginLeft: 10,
+        flex: 1,
     },
     subjectName: {
         fontSize: 18,
         fontWeight: 'bold',
         color: '#253494', // Cor azul
+        marginBottom: 5,
     },
     subjectTime: {
         fontSize: 14,
@@ -80,13 +80,6 @@ const homeStyles = StyleSheet.create({
     subjectLocation: {
         fontSize: 14,
         color: '#666', // Cor cinza
-    },
-    totalClassesText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginTop: 10,
-        color: '#253494',
-        textAlign: 'center',
     },
     tipsContainer: {
         marginTop: 20,
@@ -99,15 +92,23 @@ const homeStyles = StyleSheet.create({
     },
     tip: {
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         color: '#333',
         marginTop: 10,
         marginLeft: 10,
+        marginRight: 10,
     },
     noClassesText: {
         fontSize: 16,
         color: '#666',
         textAlign: 'center',
+    },
+    totalClassesText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 10,
+        color: '#253494',
+        textAlign: 'center'
     },
 });
 
