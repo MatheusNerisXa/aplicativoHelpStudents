@@ -1,4 +1,7 @@
 const express = require('express');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
@@ -13,6 +16,19 @@ let app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Configuração do Multer para lidar com o upload de arquivos
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'assets/files'); // O diretório onde os arquivos serão salvos
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname); // Nome do arquivo após o upload
+    }
+  });
+  
+  const upload = multer({ storage: storage });
+
 
 // Configuração do Nodemailer
 const transporter = nodemailer.createTransport({
@@ -170,7 +186,7 @@ app.post('/createSubject', async (req, res) => {
         console.log('Nova matéria criada com sucesso:', newSubject);
 
         if (newSubject) {
-            res.status(201).json({ message: 'Matéria criada com sucesso!' });
+            res.status(201).json({ message: 'Matéria criada com sucesso!', subjectId: newSubject.id });
         } else {
             console.log('Erro: A nova matéria não foi criada.');
             res.status(500).json({ error: 'Erro ao criar a matéria.' });
@@ -180,6 +196,7 @@ app.post('/createSubject', async (req, res) => {
         res.status(500).json({ error: 'Erro durante a criação da matéria.' });
     }
 });
+
 
 
 app.get('/getUserId', async (req, res) => {
@@ -344,6 +361,66 @@ app.delete('/stopwatches/:stopwatchId', async (req, res) => {
     }
 });
 
+app.post('/uploadPhoto', upload.array('photo', 10), async (req, res) => {
+    try {
+        const files = req.files;
+
+        if (!files || files.length === 0) {
+            return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
+        }
+        
+        const fileDetails = [];
+
+        for (const file of files) {
+            const filePath = file.path;
+            const fileName = file.filename;
+            const description = req.body.description;
+            const subjectId = req.body.subjectId;
+
+            // Salvar os detalhes do arquivo na tabela Files
+            const newFile = await model.File.create({
+                description: description,
+                url: filePath,
+                subjectId: subjectId // Associa o arquivo à matéria específica
+            });
+
+            fileDetails.push(newFile);
+        }
+
+        res.status(200).json({ message: 'Fotos enviadas com sucesso.', fileDetails: fileDetails });
+    } catch (error) {
+        console.error('Erro durante o upload de fotos:', error);
+        res.status(500).json({ error: 'Erro durante o upload de fotos.' });
+    }
+});
+
+// Rota para exibir todos os arquivos associados a um subjectId específico
+app.get('/files/:subjectId', async (req, res) => {
+    try {
+      const subjectId = req.params.subjectId;
+  
+      if (!subjectId) {
+        return res.status(400).json({ error: 'O parâmetro "subjectId" é obrigatório.' });
+      }
+  
+      // Consultar todos os arquivos associados ao subjectId fornecido
+      const files = await model.File.findAll({
+        where: {
+          subjectId: subjectId
+        }
+      });
+  
+      if (files.length === 0) {
+        return res.status(404).json({ error: 'Nenhum arquivo encontrado para o subjectId fornecido.' });
+      }
+  
+      res.json(files);
+    } catch (error) {
+      console.error('Erro ao obter arquivos por subjectId:', error);
+      res.status(500).json({ error: 'Erro ao obter arquivos por subjectId.' });
+    }
+  });
+  
 // Start Server
 let port = process.env.PORT || 3000;
 app.listen(port, (req, res) => {

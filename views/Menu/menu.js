@@ -24,8 +24,8 @@ const Menu = () => {
       navigation.navigate('HelpScreen');
     } else if (menuItem === 'Calculadora') {
       navigation.navigate('ScientificCalculator');
-    } else if (menuItem === 'Correção de Textos') {
-      // Adicione aqui a navegação para a tela de Correção de Textos
+    } else if (menuItem === 'Arquivos') {
+      navigation.navigate('FileScreen');
     } else {
       navigation.navigate(menuItem);
     }

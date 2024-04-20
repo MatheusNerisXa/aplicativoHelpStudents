@@ -20,6 +20,9 @@ import StopwatchScreen from './views/Stopwatches/stopwatches';
 import HistoryScreen from './views/Stopwatches/history';
 import HelpScreen from './views/Help/helpscreen';
 import ScientificCalculator from './views/Scientificcalculator/scientificcalculator';
+import FileScreen from './views/Files/file';
+import SubjectPhotosScreen from './views/Files/SubjectPhotosScreen';
+import AddPhotoScreen from './views/Files/AddPhotoScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -294,6 +297,74 @@ const TabNavigator = ({ route, navigation }) => {
   />
 
 <Tab.Screen
+      name="FileScreen"
+      component={FileScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Galeria de arquivos',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+<Tab.Screen
+      name="SubjectPhotosScreen"
+      component={SubjectPhotosScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Arquivos',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+<Tab.Screen
+      name="AddPhotoScreen"
+      component={AddPhotoScreen}
+      options={({ navigation }) => ({
+      headerShown: true,
+      headerStyle: { backgroundColor: '#253494' },
+      headerTintColor: 'white',
+      title: 'Arquivos',
+      gestureEnabled: true, // Habilita o gesto de deslizar
+      gestureDirection: 'horizontal', // Define a direção do gesto como horizontal
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => navigation.navigate('Menu')} // Navegação de volta para o menu
+        >
+          <MaterialIcons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      tabBarItemStyle: { display: 'none' }, // Remove completamente a guia e o espaço ocupado
+    })}
+  />
+
+  
+
+<Tab.Screen
       name="HistoryScreen"
       component={HistoryScreen}
       options={({ navigation }) => ({
@@ -548,6 +619,66 @@ export default function App() {
             ),
           }}
         />
+
+<Stack.Screen
+          name="FileScreen"
+          component={FileScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Galeria de arquivos',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
+<Stack.Screen
+          name="SubjectPhotosScreen"
+          component={SubjectPhotosScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Arquivos',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
+<Stack.Screen
+          name="AddPhotoScreen"
+          component={AddPhotoScreen}
+          options={{
+            headerShown: true,
+            headerStyle: { backgroundColor: '#253494' },
+            headerTintColor: 'white',
+            title: 'Arquivos',
+            headerLeft: ({ onPress }) => (
+              <TouchableOpacity
+                style={{ marginLeft: 16 }}
+                onPress={onPress}
+              >
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
+
+
         <Stack.Screen
           name="StopwatchScreen"
           component={StopwatchScreen}
